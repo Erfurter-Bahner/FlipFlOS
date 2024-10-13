@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3D70EAF1-1BDF-4DA0-A1F6-F39ABC729515}|flipflOS\\flipflOS.csproj|c:\\users\\phill_9k2xq1z\\source\\repos\\flipflos\\flipflos\\kernel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3D70EAF1-1BDF-4DA0-A1F6-F39ABC729515}|flipflOS\\flipflOS.csproj|solutionrelative:flipflos\\kernel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3D70EAF1-1BDF-4DA0-A1F6-F39ABC729515}|flipflOS\\flipflOS.csproj|c:\\users\\phill_9k2xq1z\\source\\repos\\flipflos\\flipflos\\memory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3D70EAF1-1BDF-4DA0-A1F6-F39ABC729515}|flipflOS\\flipflOS.csproj|solutionrelative:flipflos\\memory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Memory.cs",
+              "DocumentMoniker": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\Memory.cs",
+              "RelativeDocumentMoniker": "flipflOS\\Memory.cs",
+              "ToolTip": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\Memory.cs",
+              "RelativeToolTip": "flipflOS\\Memory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-11T08:39:06.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Kernel.cs",
+              "DocumentMoniker": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\Kernel.cs",
+              "RelativeDocumentMoniker": "flipflOS\\Kernel.cs",
+              "ToolTip": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\Kernel.cs",
+              "RelativeToolTip": "flipflOS\\Kernel.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowEkAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-11T07:54:36.434Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

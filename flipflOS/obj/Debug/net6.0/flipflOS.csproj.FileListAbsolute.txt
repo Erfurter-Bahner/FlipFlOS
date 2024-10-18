@@ -10,3 +10,16 @@ C:\Users\phill_9k2xq1z\source\repos\flipflOS\flipflOS\obj\Debug\net6.0\flipflOS.
 C:\Users\phill_9k2xq1z\source\repos\flipflOS\flipflOS\obj\Debug\net6.0\refint\flipflOS.dll
 C:\Users\phill_9k2xq1z\source\repos\flipflOS\flipflOS\obj\Debug\net6.0\flipflOS.pdb
 C:\Users\phill_9k2xq1z\source\repos\flipflOS\flipflOS\obj\Debug\net6.0\ref\flipflOS.dll
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.csproj.AssemblyReference.cache
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.AssemblyInfoInputs.cache
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.AssemblyInfo.cs
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.csproj.CoreCompileInputs.cache
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.sourcelink.json
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.dll
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\refint\flipflOS.dll
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\flipflOS.pdb
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\bin\Debug\net6.0\flipflOS.deps.json
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\bin\Debug\net6.0\flipflOS.dll
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\bin\Debug\net6.0\flipflOS.pdb
+C:\Users\ndipa\Source\Repos\FlipFlOS\flipflOS\obj\Debug\net6.0\ref\flipflOS.dll

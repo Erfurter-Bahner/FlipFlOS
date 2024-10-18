@@ -533,19 +533,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\phill_9k2xq1z\\.nuget\\packages\\": {}
+    "C:\\Users\\ndipa\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\flipflOS.csproj",
+      "projectUniqueName": "C:\\Users\\ndipa\\Source\\Repos\\FlipFlOS\\flipflOS\\flipflOS.csproj",
       "projectName": "flipflOS",
-      "projectPath": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\flipflOS.csproj",
-      "packagesPath": "C:\\Users\\phill_9k2xq1z\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\phill_9k2xq1z\\source\\repos\\flipflOS\\flipflOS\\obj\\",
+      "projectPath": "C:\\Users\\ndipa\\Source\\Repos\\FlipFlOS\\flipflOS\\flipflOS.csproj",
+      "packagesPath": "C:\\Users\\ndipa\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ndipa\\Source\\Repos\\FlipFlOS\\flipflOS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\phill_9k2xq1z\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ndipa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -553,7 +553,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\phill_9k2xq1z\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
+        "C:\\Users\\ndipa\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

@@ -25,7 +25,7 @@ namespace flipflOS
 
             while (true)
             {
-                Console.Write(currentdir.getPath()+" : ");
+                Console.Write(currentdir.getPath() + " : ");
                 currentInput = "";
 
                 while (true)
@@ -38,7 +38,7 @@ namespace flipflOS
                         if (!string.IsNullOrWhiteSpace(currentInput))
                         {
                             commandHistory.Add(currentInput);
-                            historyIndex = commandHistory.Count; // Index auf das Ende setzen
+                            historyIndex = commandHistory.Count; // Index to end
                         }
                         break;
                     }
@@ -46,8 +46,9 @@ namespace flipflOS
                     {
                         if (currentInput.Length > 0)
                         {
-                            currentInput = currentInput.Substring(0,currentInput.Length - 1); // Letztes Zeichen entfernen
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r"+currentdir.getPath()+" : " + currentInput);
+                            currentInput = currentInput.Substring(0, currentInput.Length - 1);
+                            ClearCurrentLine();
+                            Console.Write(currentdir.getPath() + " : " + currentInput);
                         }
                     }
                     else if (key.Key == ConsoleKey.UpArrow)
@@ -55,8 +56,9 @@ namespace flipflOS
                         if (historyIndex > 0)
                         {
                             historyIndex--;
-                            currentInput = commandHistory[historyIndex]; // Befehl aus der Historie holen
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : " + currentInput); // Befehl anzeigen
+                            currentInput = commandHistory[historyIndex]; // Fetch command from history
+                            ClearCurrentLine();
+                            Console.Write(currentdir.getPath() + " : " + currentInput);
                         }
                     }
                     else if (key.Key == ConsoleKey.DownArrow)
@@ -64,13 +66,15 @@ namespace flipflOS
                         if (historyIndex < commandHistory.Count - 1)
                         {
                             historyIndex++;
-                            currentInput = commandHistory[historyIndex]; // Nächster Befehl aus der Historie
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : " + currentInput); // Befehl anzeigen
+                            currentInput = commandHistory[historyIndex]; // Fetch next command from history
+                            ClearCurrentLine();
+                            Console.Write(currentdir.getPath() + " : " + currentInput);
                         }
                         else
                         {
-                            currentInput = ""; // Kein Befehl mehr, Eingabe leeren
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : ");
+                            currentInput = ""; // No more commands, clear input
+                            ClearCurrentLine();
+                            Console.Write(currentdir.getPath() + " : ");
                         }
                     }
                     else
@@ -107,6 +111,7 @@ namespace flipflOS
                         break;
                     case "mkdir":
                         currentdir.createSubDirectory(args[1]);
+                        ClearCurrentLine();  // Make sure to clear the line after mkdir
                         break;
                     case "touch":
                         currentdir.createFile(args[1]);
@@ -121,8 +126,12 @@ namespace flipflOS
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;
                 }
+
+                // Ensure the prompt is reset after every command execution
+                ClearCurrentLine();
             }
         }
+
 
         public void help(String[] args)
         {
@@ -172,6 +181,14 @@ namespace flipflOS
             currentdir.createSubDirectory("users");
             currentdir.createSubDirectory("var");
         }
+        public void ClearCurrentLine()
+        {
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, currentLineCursor);
+            Console.Write(new string(' ', Console.WindowWidth)); // Clear the line
+            Console.SetCursorPosition(0, currentLineCursor);    // Reset cursor to the beginning
+        }
+
         public void changeDir(String[] args)
         {
             if (args.Length == 1)

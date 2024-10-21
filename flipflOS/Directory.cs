@@ -28,8 +28,6 @@ namespace flipflOS
         }
         public void createFile(string name)
         {
-            Console.WriteLine("Creating File: " + name);
-
             // Check if files is null and initialize it if necessary
             if (files == null)
             {
@@ -37,8 +35,6 @@ namespace flipflOS
             }
 
             File[] newFiles = new File[files.Length + 1];
-            Console.WriteLine("Created new Files array");
-
             // Copy existing files to the new array
             for (int i = 0; i < files.Length; i++)
             {

@@ -205,6 +205,7 @@ namespace flipflOS
             String content = "";
             for (int i = 2; i < args.Length; i++)
             {
+
                 content += args[i]+" ";
             }
             currentdir.getFile(args[1]).changecontent(content);

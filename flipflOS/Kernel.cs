@@ -6,13 +6,44 @@ namespace flipflOS
 {
     public class Kernel : Sys.Kernel
     {
+        string[] commands = new string[]
+        {
+            "time",
+            "help",
+            "write [index] [byte]",
+            "read [index]",
+            "cd [directory]",
+            "gcd",
+            "ls",
+            "mkdir [directory]",
+            "touch [file]",
+            "writeFile [file] [content]",
+            "readFile [file]"
+        };
+
+        // Array of descriptions (these will be printed in black)
+        string[] descriptions = new string[]
+        {
+            "for getting current runtime",
+            "for getting help :D",
+            "Writing data",
+            "reading data",
+            "changes directory to chosen directory. `cd ..` for parent",
+            "prints current path of directory",
+            "prints list of all elements in current directory",
+            "creates subdirectory in current directory.",
+            "creates File",
+            "writes Strings into destined File",
+            "prints content of file"
+        };
+
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
         protected override void BeforeRun()
         {
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
-            Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe!");
             start = DateTime.Now;
         }
 
@@ -160,15 +191,15 @@ namespace flipflOS
             }
             else
             {
-                Console.WriteLine("time" +
-                    "\n\tfor getting current runtime" +
-                    "\nhelp" +
-                    "\n\tfor getting help :D" +
-                    "\nwrite [index] [byte]" +
-                    "\n\tWriting data" +
-                    "\nread [index]" +
-                    "\n\treading data");
+                // Loop through both arrays and print them with appropriate colors
+                for (int i = 0; i < commands.Length; i++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine(commands[i]);
 
+                    Console.ResetColor();
+                    Console.WriteLine("\t" + descriptions[i]);
+                }
             }
         }
         public void writeToMemory(String[] args)

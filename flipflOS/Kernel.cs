@@ -7,11 +7,11 @@ namespace flipflOS
     public class Kernel : Sys.Kernel
     {
         DateTime start;
-        Memory mem = new Memory();
+        Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
         protected override void BeforeRun()
         {
-            createRoot();
+            createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
             start = DateTime.Now;
         }
@@ -19,89 +19,93 @@ namespace flipflOS
         protected override void Run()
         {
             List<string> commandHistory = new List<string>();
-            int historyIndex = -1;
+            int historyIndex = -1;  //commandHistory für pfeiltasten-navigation
             string currentInput = "";
 
             while (true)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-
+                Console.ForegroundColor = ConsoleColor.Green; //ändert Farbe zu Grün
                 Console.Write(currentdir.getPath() + " : ");
-                Console.ResetColor();
+                Console.ResetColor(); //textfarbe zurück zu schwarz
 
                 currentInput = "";
 
                 while (true)
                 {
-                    var key = Console.ReadKey(intercept: true);
-
-                    if (key.Key == ConsoleKey.Enter)
+                    var key = Console.ReadKey(intercept: true); //input erkennung für mögliche Eingabe von Pfeil hoch, runter und Backspace
+                    switch (key.Key)
                     {
-                        Console.WriteLine();
-                        if (!string.IsNullOrWhiteSpace(currentInput))
-                        {
-                            commandHistory.Add(currentInput);
-                            historyIndex = commandHistory.Count; // Index to end
-                        }
+                        case ConsoleKey.Enter:
+                            Console.WriteLine();
+                            if (!string.IsNullOrWhiteSpace(currentInput))
+                            {
+                                commandHistory.Add(currentInput);
+                                historyIndex = commandHistory.Count;
+                            }
+                            break;
+
+                        case ConsoleKey.Backspace:
+                            if (currentInput.Length > 0)
+                            {
+                                currentInput = currentInput.Substring(0, currentInput.Length - 1);
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
+                            }
+                            break;
+
+                        case ConsoleKey.UpArrow: //schreibt letzten command 
+                            if (historyIndex > 0)
+                            { 
+                                historyIndex--;
+                                currentInput = commandHistory[historyIndex]; // Fetch command from history
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
+                            }
+                            break;
+
+                        case ConsoleKey.DownArrow: //schreibt nächsten command
+                            if (historyIndex < commandHistory.Count - 1)
+                            {
+                                historyIndex++;
+                                currentInput = commandHistory[historyIndex]; // Fetch next command from history
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
+                            }
+                            else
+                            {
+                                currentInput = ""; // No more commands, clear input
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath() + " : ");
+                                Console.ResetColor();
+                            }
+                            break;
+
+                        default:
+                            currentInput += key.KeyChar;
+                            Console.Write(key.KeyChar);
+                            break;
+                    }
+
+                    if (key.Key == ConsoleKey.Enter) // End the loop after an "Enter" press
+                    {
                         break;
-                    }
-                    else if (key.Key == ConsoleKey.Backspace)
-                    {
-                        if (currentInput.Length > 0)
-                        {
-                            currentInput = currentInput.Substring(0, currentInput.Length - 1);
-                            ClearCurrentLine();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(currentdir.getPath());
-                            Console.ResetColor();
-                            Console.Write(" : " + currentInput);
-                        }
-                    }
-                    else if (key.Key == ConsoleKey.UpArrow)
-                    {
-                        if (historyIndex > 0)
-                        {
-                            historyIndex--;
-                            currentInput = commandHistory[historyIndex]; // Fetch command from history
-                            ClearCurrentLine();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(currentdir.getPath());
-                            Console.ResetColor();
-                            Console.Write(" : " + currentInput);
-                        }
-                    }
-                    else if (key.Key == ConsoleKey.DownArrow)
-                    {
-                        if (historyIndex < commandHistory.Count - 1)
-                        {
-                            historyIndex++;
-                            currentInput = commandHistory[historyIndex]; // Fetch next command from history
-                            ClearCurrentLine();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(currentdir.getPath());
-                            Console.ResetColor();
-                            Console.Write(" : " + currentInput);
-                        }
-                        else
-                        {
-                            currentInput = ""; // No more commands, clear input
-                            ClearCurrentLine();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(currentdir.getPath() + " : ");
-                            Console.ResetColor();
-
-                        }
-                    }
-                    else
-                    {
-                        currentInput += key.KeyChar;
-                        Console.Write(key.KeyChar);
                     }
                 }
 
+
                 string[] args = currentInput.Split(' ');
                 ClearCurrentLine();
-                switch (args[0])
+                switch (args[0]) //commands werden überprüft
                 {
                     case "help":
                         help(args);
@@ -200,8 +204,8 @@ namespace flipflOS
         {
             int currentLineCursor = Console.CursorTop;
             Console.SetCursorPosition(0, currentLineCursor);
-            Console.Write(new string(' ', Console.WindowWidth - 1)); // Clear the line by filling it with spaces
-            Console.SetCursorPosition(0, currentLineCursor);        // Reset cursor to the start of the line
+            Console.Write(new string(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, currentLineCursor);  
         }
 
 

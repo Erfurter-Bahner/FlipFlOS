@@ -1,8 +1,7 @@
 # Build-Binaries
-bin/*
-obj/*
-flipflOS/bin/*
-flipflOS/obj/*
+**/obj/
+**/bin/
+
 
 # User-spezifische Dateien
 .vs/

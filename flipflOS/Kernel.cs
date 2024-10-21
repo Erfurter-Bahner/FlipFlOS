@@ -25,7 +25,7 @@ namespace flipflOS
 
             while (true)
             {
-                Console.Write("Input: ");
+                Console.Write(currentdir.getPath()+" : ");
                 currentInput = "";
 
                 while (true)

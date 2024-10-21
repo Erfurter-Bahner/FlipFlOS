@@ -49,7 +49,17 @@ namespace flipflOS
             newFiles[newFiles.Length - 1] = new File(name, "");
             files = newFiles;
         }
-
+        public String getPath()
+        {
+            String path = "";
+            Directory currentdir = this;
+            while (currentdir != null)
+            {
+                path = currentdir.name +"/"+ path;
+                currentdir = currentdir.parent;
+            }
+            return path;
+        }
         public File getFile(String filename)
         {
             if (filename == null || this.files == null)

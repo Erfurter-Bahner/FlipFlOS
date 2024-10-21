@@ -100,13 +100,22 @@ namespace flipflOS
                         changeDir(args);
                         break;
                     case "gcd":
-                        getCurrentDir();
+                        printCurrentDir();
                         break;
                     case "ls":
-                        getAllFilesAndDirs();
+                        printAllFilesAndDirs();
                         break;
                     case "mkdir":
                         currentdir.createSubDirectory(args[1]);
+                        break;
+                    case "touch":
+                        currentdir.createFile(args[1]);
+                        break;
+                    case "writeFile":
+                        writeToFile(args);
+                        break;
+                    case "readFile":
+                        readFile(args[1]);
                         break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
@@ -186,11 +195,25 @@ namespace flipflOS
                 }
             }
         }
-        public void getCurrentDir()
+        public void printCurrentDir()
         {
             Console.WriteLine(currentdir.name);
         }
-        public void getAllFilesAndDirs()
+        public void writeToFile(String[] args)
+        {
+            if (args.Length == 1) return;
+            String content = "";
+            for (int i = 2; i < args.Length; i++)
+            {
+                content += args[i]+" ";
+            }
+            currentdir.getFile(args[1]).changecontent(content);
+        }
+        public void readFile(String filename)
+        {
+            Console.WriteLine(currentdir.getFile(filename).name+": "+currentdir.getFile(filename).content);
+        }
+        public void printAllFilesAndDirs()
         {
             if (currentdir.subdirectories != null)
             {

@@ -25,7 +25,7 @@ namespace flipflOS
 
             while (true)
             {
-                Console.Write("Input: ");
+                Console.Write(currentdir.getPath()+" : ");
                 currentInput = "";
 
                 while (true)
@@ -47,7 +47,7 @@ namespace flipflOS
                         if (currentInput.Length > 0)
                         {
                             currentInput = currentInput.Substring(0,currentInput.Length - 1); // Letztes Zeichen entfernen
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\rInput: " + currentInput);
+                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r"+currentdir.getPath()+" : " + currentInput);
                         }
                     }
                     else if (key.Key == ConsoleKey.UpArrow)
@@ -56,7 +56,7 @@ namespace flipflOS
                         {
                             historyIndex--;
                             currentInput = commandHistory[historyIndex]; // Befehl aus der Historie holen
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\rInput: " + currentInput); // Befehl anzeigen
+                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : " + currentInput); // Befehl anzeigen
                         }
                     }
                     else if (key.Key == ConsoleKey.DownArrow)
@@ -65,12 +65,12 @@ namespace flipflOS
                         {
                             historyIndex++;
                             currentInput = commandHistory[historyIndex]; // Nächster Befehl aus der Historie
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\rInput: " + currentInput); // Befehl anzeigen
+                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : " + currentInput); // Befehl anzeigen
                         }
                         else
                         {
                             currentInput = ""; // Kein Befehl mehr, Eingabe leeren
-                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\rInput: ");
+                            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r" + currentdir.getPath() + " : ");
                         }
                     }
                     else

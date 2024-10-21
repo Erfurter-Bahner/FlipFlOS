@@ -14,7 +14,6 @@ namespace flipflOS
             createRoot();
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
             start = DateTime.Now;
-
         }
 
         protected override void Run()
@@ -25,7 +24,11 @@ namespace flipflOS
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
+
                 Console.Write(currentdir.getPath() + " : ");
+                Console.ResetColor();
+
                 currentInput = "";
 
                 while (true)
@@ -48,7 +51,10 @@ namespace flipflOS
                         {
                             currentInput = currentInput.Substring(0, currentInput.Length - 1);
                             ClearCurrentLine();
-                            Console.Write(currentdir.getPath() + " : " + currentInput);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write(currentdir.getPath());
+                            Console.ResetColor();
+                            Console.Write(" : " + currentInput);
                         }
                     }
                     else if (key.Key == ConsoleKey.UpArrow)
@@ -58,7 +64,10 @@ namespace flipflOS
                             historyIndex--;
                             currentInput = commandHistory[historyIndex]; // Fetch command from history
                             ClearCurrentLine();
-                            Console.Write(currentdir.getPath() + " : " + currentInput);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write(currentdir.getPath());
+                            Console.ResetColor();
+                            Console.Write(" : " + currentInput);
                         }
                     }
                     else if (key.Key == ConsoleKey.DownArrow)
@@ -68,13 +77,19 @@ namespace flipflOS
                             historyIndex++;
                             currentInput = commandHistory[historyIndex]; // Fetch next command from history
                             ClearCurrentLine();
-                            Console.Write(currentdir.getPath() + " : " + currentInput);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write(currentdir.getPath());
+                            Console.ResetColor();
+                            Console.Write(" : " + currentInput);
                         }
                         else
                         {
                             currentInput = ""; // No more commands, clear input
                             ClearCurrentLine();
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write(currentdir.getPath() + " : ");
+                            Console.ResetColor();
+
                         }
                     }
                     else
@@ -85,6 +100,7 @@ namespace flipflOS
                 }
 
                 string[] args = currentInput.Split(' ');
+                ClearCurrentLine();
                 switch (args[0])
                 {
                     case "help":
@@ -111,7 +127,6 @@ namespace flipflOS
                         break;
                     case "mkdir":
                         currentdir.createSubDirectory(args[1]);
-                        ClearCurrentLine();  // Make sure to clear the line after mkdir
                         break;
                     case "touch":
                         currentdir.createFile(args[1]);
@@ -181,13 +196,14 @@ namespace flipflOS
             currentdir.createSubDirectory("users");
             currentdir.createSubDirectory("var");
         }
-        public void ClearCurrentLine()
+        public static void ClearCurrentLine()
         {
             int currentLineCursor = Console.CursorTop;
             Console.SetCursorPosition(0, currentLineCursor);
-            Console.Write(new string(' ', Console.WindowWidth)); // Clear the line
-            Console.SetCursorPosition(0, currentLineCursor);    // Reset cursor to the beginning
+            Console.Write(new string(' ', Console.WindowWidth - 1)); // Clear the line by filling it with spaces
+            Console.SetCursorPosition(0, currentLineCursor);        // Reset cursor to the start of the line
         }
+
 
         public void changeDir(String[] args)
         {
@@ -233,8 +249,11 @@ namespace flipflOS
         }
         public void printAllFilesAndDirs()
         {
+
             if (currentdir.subdirectories != null)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 foreach (var dir in currentdir.subdirectories)
                 {
                     Console.WriteLine($"{dir.name}");
@@ -243,11 +262,14 @@ namespace flipflOS
 
             if (currentdir.files != null)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
+
                 foreach (var file in currentdir.files)
                 {
                     Console.WriteLine($"{file.name}");
                 }
             }
+            Console.ForegroundColor = ConsoleColor.Black;
 
         }
     }

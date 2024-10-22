@@ -106,21 +106,22 @@ namespace flipflOS
                 string[] args = currentInput.Split(' ');
                 ClearCurrentLine();
                 if (args.Length>=2 && args[1] == "-help" && CommandManager.getCommand(args[0])!=null)
-                {
+                {                                   // diese abfrage guckt, ob nach dem command das -help attribut steht, 
+                                                    // um statt dem befehl die informationen dazu auszugeben
                     Console.WriteLine(CommandManager.getCommand(args[0]).usage);
                     Console.WriteLine("\t"+CommandManager.getCommand(args[0]).info);
                     ClearCurrentLine();
                 }
                 else
                 {
-                    switch (args[0]) //commands werden überprüft
+                    switch (args[0]) // switch case der möglichen commands
                     {
                     case "help":
                         help(args);
                         break;
                     case "time":
                         TimeSpan runtime = DateTime.Now - start;
-                        Console.WriteLine("running for: " + runtime.TotalSeconds + " seconds");
+                        Console.WriteLine("running for: " + runtime.TotalSeconds + " seconds"); // gibt sekunden seit systemstart aus
                         break;
                     case "write":
                         writeToMemory(args);
@@ -168,13 +169,13 @@ namespace flipflOS
             }
             else
             {
-                // Loop through both arrays and print them with appropriate colors
+                //schleife durch array aller commands, mit angabe der usage und info, und verwendung von Farbe
                 for (int i = 0; i < CommandManager.commands.Length; i++)
                 {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.ForegroundColor = ConsoleColor.Magenta; //magenta für die usage
                     Console.WriteLine(CommandManager.commands[i].usage);
 
-                    Console.ResetColor();
+                    Console.ResetColor(); //weiß für die beschreibung
                     Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
             }
@@ -202,14 +203,14 @@ namespace flipflOS
             return mem.readAt(index);
         }
         public void createRoot()
-        {
+        { //erstellt alle nötigen verzeichnisse für das dateisystem
             currentdir = new Directory(null, null, "root");
             currentdir.createSubDirectory("home");
             currentdir.createSubDirectory("users");
             currentdir.createSubDirectory("var");
         }
         public static void ClearCurrentLine()
-        {
+        { //stellt sicher, dass während der navigation mit pfeiltasten keine neue Zeile begonnen wird.
             int currentLineCursor = Console.CursorTop;
             Console.SetCursorPosition(0, currentLineCursor);
             Console.Write(new string(' ', Console.WindowWidth - 1));
@@ -220,13 +221,13 @@ namespace flipflOS
         {
             if (args.Length == 1)
             {
-                Console.WriteLine("not enough arguments.");
+                Console.WriteLine("not enough arguments."); //wenn nur "cd" geschrieben wird, argslength = 1, deswegen funktionsabbruch
                 return;
             }
-            String[] directories = args[1].Split("/");
+            String[] directories = args[1].Split("/");  //string wird in alle subdirectories aufgeteilt, welche durch "/" getrennt werden.
             foreach (String directory in directories)
             {
-                changeDir(directory);
+                changeDir(directory); // abarbeitung der directories von links nach rechts
             }
         }
         public void changeDir(String directory)
@@ -235,14 +236,14 @@ namespace flipflOS
             {
                 if (currentdir.parent != null)
                 {
-                    currentdir = currentdir.parent;
+                    currentdir = currentdir.parent; //wenn .. dann ins parentdir
                 }
             }
             foreach (var dir in currentdir.subdirectories)
             {
                 if(dir.name == directory)
                 {
-                    currentdir = dir;
+                    currentdir = dir; //sucht nach dem subdirectory und setzt pointer von currentdir auf ihn.
                     return;
                 }
             }
@@ -256,15 +257,14 @@ namespace flipflOS
         {
             if (args.Length == 1) return;
             String content = "";
-            for (int i = 2; i < args.Length; i++)
+            for (int i = 2; i < args.Length; i++) //nimmt alle argumente nach "writeFile [file]" und schreibt sie in die datei hinein.
             {
-
                 content += args[i]+" ";
             }
             currentdir.getFile(args[1]).changecontent(content);
         }
         public void readFile(String filename)
-        {
+        { //liest den dateiinhalt und gibt ihn aus
             Console.WriteLine(currentdir.getFile(filename).name+": "+currentdir.getFile(filename).content);
         }
         public void printAllFilesAndDirs()
@@ -274,7 +274,7 @@ namespace flipflOS
             {
                 Console.ForegroundColor = ConsoleColor.Red;
 
-                foreach (var dir in currentdir.subdirectories)
+                foreach (var dir in currentdir.subdirectories) //iteriert durch alle subdirs und printet sie blau
                 {
                     Console.WriteLine($"  {dir.name}");
                 }
@@ -284,7 +284,7 @@ namespace flipflOS
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
 
-                foreach (var file in currentdir.files)
+                foreach (var file in currentdir.files) //iteriert durch alle dateiein im directory und printet sie blau
                 {
                     Console.WriteLine($"  {file.name}");
                 }

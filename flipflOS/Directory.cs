@@ -21,6 +21,11 @@ namespace flipflOS
             Directory[] newSubDirectories = new Directory[subdirectories.Length + 1];
             for (int i = 0; i < subdirectories.Length; i++)
             {
+                if (subdirectories[i].name == name)
+                {
+                    Console.WriteLine("Directory already exists.");
+                    return;
+                }
                 newSubDirectories[i] = subdirectories[i];
             }
             newSubDirectories[newSubDirectories.Length - 1] = new Directory(null, this, name);
@@ -38,6 +43,11 @@ namespace flipflOS
             // Copy existing files to the new array
             for (int i = 0; i < files.Length; i++)
             {
+                if (files[i].name == name)
+                {
+                    Console.WriteLine("File already exists.");
+                    return;
+                }
                 newFiles[i] = files[i];
             }
 

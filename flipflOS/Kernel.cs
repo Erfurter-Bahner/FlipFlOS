@@ -129,7 +129,7 @@ namespace flipflOS
                         Console.WriteLine(readFromMemory(args));
                         break;
                     case "cd":
-                        changeDir(args);
+                        changeDirIterative(args);
                         break;
                     case "gcd":
                         printCurrentDir();
@@ -216,33 +216,41 @@ namespace flipflOS
             Console.SetCursorPosition(0, currentLineCursor);  
         }
 
-
-        public void changeDir(String[] args)
+        public void changeDirIterative(String[] args)
         {
             if (args.Length == 1)
             {
                 Console.WriteLine("not enough arguments.");
                 return;
             }
+            String[] directories = args[1].Split("/");
+            foreach (String directory in directories)
+            {
+                changeDir(directory);
+            }
+        }
+        public void changeDir(String directory)
+        {
+            if (directory == "..")
+            {
+                if (currentdir.parent != null)
+                {
+                    currentdir = currentdir.parent;
+                }
+            }
             foreach (var dir in currentdir.subdirectories)
             {
-                if(dir.name == args[1])
+                if(dir.name == directory)
                 {
                     currentdir = dir;
                     return;
                 }
             }
-            if (args[1] == "..")
-            {
-                if(currentdir.parent != null)
-                {
-                    currentdir = currentdir.parent;
-                }
-            }
+
         }
         public void printCurrentDir()
         {
-            Console.WriteLine(currentdir.name);
+            Console.WriteLine("  "+currentdir.name);
         }
         public void writeToFile(String[] args)
         {
@@ -268,7 +276,7 @@ namespace flipflOS
 
                 foreach (var dir in currentdir.subdirectories)
                 {
-                    Console.WriteLine($"{dir.name}");
+                    Console.WriteLine($"  {dir.name}");
                 }
             }
 
@@ -278,7 +286,7 @@ namespace flipflOS
 
                 foreach (var file in currentdir.files)
                 {
-                    Console.WriteLine($"{file.name}");
+                    Console.WriteLine($"  {file.name}");
                 }
             }
             Console.ForegroundColor = ConsoleColor.Black;

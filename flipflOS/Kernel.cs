@@ -6,37 +6,6 @@ namespace flipflOS
 {
     public class Kernel : Sys.Kernel
     {
-        string[] commands = new string[]
-        {
-            "time",
-            "help",
-            "write [index] [byte]",
-            "read [index]",
-            "cd [directory]",
-            "gcd",
-            "ls",
-            "mkdir [directory]",
-            "touch [file]",
-            "writeFile [file] [content]",
-            "readFile [file]"
-        };
-
-        // Array of descriptions (these will be printed in black)
-        string[] descriptions = new string[]
-        {
-            "for getting current runtime",
-            "for getting help :D",
-            "Writing data",
-            "reading data",
-            "changes directory to chosen directory. `cd ..` for parent",
-            "prints current path of directory",
-            "prints list of all elements in current directory",
-            "creates subdirectory in current directory.",
-            "creates File",
-            "writes Strings into destined File",
-            "prints content of file"
-        };
-
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
@@ -136,8 +105,16 @@ namespace flipflOS
 
                 string[] args = currentInput.Split(' ');
                 ClearCurrentLine();
-                switch (args[0]) //commands werden überprüft
+                if (args.Length>=2 && args[1] == "-help" && CommandManager.getCommand(args[0])!=null)
                 {
+                    Console.WriteLine(CommandManager.getCommand(args[0]).usage);
+                    Console.WriteLine("\t"+CommandManager.getCommand(args[0]).info);
+                    ClearCurrentLine();
+                }
+                else
+                {
+                    switch (args[0]) //commands werden überprüft
+                    {
                     case "help":
                         help(args);
                         break;
@@ -175,8 +152,8 @@ namespace flipflOS
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;
+                    }
                 }
-
                 // Ensure the prompt is reset after every command execution
                 ClearCurrentLine();
             }
@@ -192,13 +169,13 @@ namespace flipflOS
             else
             {
                 // Loop through both arrays and print them with appropriate colors
-                for (int i = 0; i < commands.Length; i++)
+                for (int i = 0; i < CommandManager.commands.Length; i++)
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine(commands[i]);
+                    Console.WriteLine(CommandManager.commands[i].usage);
 
                     Console.ResetColor();
-                    Console.WriteLine("\t" + descriptions[i]);
+                    Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
             }
         }

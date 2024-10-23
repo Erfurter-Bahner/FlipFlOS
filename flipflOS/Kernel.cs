@@ -10,11 +10,25 @@ namespace flipflOS
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
+        String[] logo =
+        {
+            "--------------------------------",
+            "OOO O   OOO OOO OOO O    OOO OOO",
+            "O   O    O  O O O   O    O O O  ",
+            "OOO O    O  OOO OOO O    O O OOO",
+            "O   O    O  O   O   O    O O   O",
+            "O   OOO OOO O   O   OOO  OOO OOO",
+            "--------------------------------",
+        };
         protected override void BeforeRun()
         {
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
+            Console.Clear();
+            loadingScreen(5);
+            Console.Clear();
             Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe!");
             start = DateTime.Now;
+           
         }
 
         protected override void Run()
@@ -150,6 +164,13 @@ namespace flipflOS
                         break;
                     case "readFile":
                         readFile(args[1]);
+                        break;
+                    case "clear":
+                            Console.Clear();
+                        break;
+                        case "loadingScreen":
+                            if (args.Length == 1) break;
+                            loadingScreen(int.Parse(args[1]));
                         break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
@@ -335,6 +356,71 @@ namespace flipflOS
             Console.ForegroundColor = ConsoleColor.Black;
 
         }
+        public void loadingScreen(int seconds)
+        {
+            Console.Clear();
+
+            if(seconds > 5) seconds = 5;
+
+            int centerX = Console.WindowWidth / 2;
+            int centerY = Console.WindowHeight / 2;
+
+            int[] posX = new int[] { centerX - 1, centerX-1,centerX,centerX+1,centerX+1,centerX+1,centerX,centerX-1};
+            int[] posY = new int[] { centerY, centerY + 1, centerY + 1, centerY + 1, centerY, centerY - 1, centerY -1, centerY - 1 };
+            drawLogo(centerX - 16, centerY - 9);
+            double startingTime = 0;
+            int spinnerIndex = 0;
+
+            for(int i = 0; i<posX.Length; i++)
+            {
+                Console.SetCursorPosition(posX[i], posY[i]);
+                Console.Write("O");
+
+            }
+            while (startingTime < seconds)
+            {
+
+                if (spinnerIndex > posX.Length)
+                {
+                    spinnerIndex = 0;
+                }
+                // Set cursor to the middle of the screen
+                Console.SetCursorPosition(posX[spinnerIndex], posY[spinnerIndex]);
+
+                // Draw the current spinner character
+                Console.Write(" ");
+
+                // Sleep for 100 milliseconds (20 frames per second)
+                Sleep(5);
+                Console.SetCursorPosition(posX[spinnerIndex], posY[spinnerIndex]);
+                // Increment the time counter
+                startingTime += 0.1 * 10;
+                spinnerIndex++;
+                // Optional: Clear the spinner before redrawing
+                Console.Write('O'); // Erase the previous spinner before the next frame
+            }
+            Console.Clear();
+            ClearCurrentLine();
+        }
+        public void drawLogo(int X, int Y)
+        {
+            for (int i = 0; i < logo.Length; i++)
+            {
+                Console.SetCursorPosition(X, Y);
+                Console.Write(logo[i]);
+                Y++;
+            }
+        }
+        public void Sleep(int milliseconds)
+        {
+            // Simple delay using a busy loop
+            var ticks = DateTime.Now.Ticks + (milliseconds * 10000); // Convert milliseconds to ticks (1 ms = 10000 ticks)
+            while (DateTime.Now.Ticks < ticks)
+            {
+                // Do nothing, just wait
+            }
+        }
+
     }
 }
 

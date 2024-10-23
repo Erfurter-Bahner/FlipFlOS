@@ -52,7 +52,7 @@ namespace flipflOS
             }
 
             // Add the new file to the last position
-            newFiles[newFiles.Length - 1] = new File(name, "");
+            newFiles[newFiles.Length - 1] = new File(name, new string[]{ });
             files = newFiles;
         }
         public String getPath()
@@ -82,13 +82,13 @@ namespace flipflOS
         public class File
         {
             public String name;
-            public String content;
-            public File(String name, String content)
+            public String[] content;
+            public File(String name, String[] content)
             {
                 this.name = name;
                 this.content = content;
             }
-            public void changecontent(String content)
+            public void changecontent(String[] content)
             {
                 this.content = content;
             }

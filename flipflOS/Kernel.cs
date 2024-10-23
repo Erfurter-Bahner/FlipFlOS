@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Sys = Cosmos.System;
 
 namespace flipflOS
@@ -257,16 +258,58 @@ namespace flipflOS
         {
             if (args.Length == 1) return;
             String content = "";
+
             for (int i = 2; i < args.Length; i++) //nimmt alle argumente nach "writeFile [file]" und schreibt sie in die datei hinein.
             {
-                content += args[i]+" ";
+                String argument = args[i];
+                content += argument+" ";
             }
-            currentdir.getFile(args[1]).changecontent(content);
+            //now content has the whole line
+            content = AddSeparator(content);
+            String[] splitbynewlines = content.Split('/');
+
+            currentdir.getFile(args[1]).changecontent(splitbynewlines);
         }
         public void readFile(String filename)
         { //liest den dateiinhalt und gibt ihn aus
-            Console.WriteLine(currentdir.getFile(filename).name+": "+currentdir.getFile(filename).content);
+            Console.WriteLine(currentdir.getFile(filename).name + ": ");
+            for (int i = 0; i < currentdir.getFile(filename).content.Length; i++)
+            {
+                Console.WriteLine(currentdir.getFile(filename).content[i]);
+            }
         }
+        public string AddSeparator(string input)
+        {
+            StringBuilder result = new StringBuilder();
+            int countSinceLastSlash = 0; // Track the number of characters since the last "/"
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                // Add current character to result
+                result.Append(input[i]);
+
+                // Increase the counter if the character is not '/'
+                if (input[i] != '/')
+                {
+                    countSinceLastSlash++;
+                }
+                else
+                {
+                    // Reset the counter when a '/' is encountered
+                    countSinceLastSlash = 0;
+                }
+
+                // If we've reached 50 characters without a '/', add "-/"
+                if (countSinceLastSlash == 50)
+                {
+                    result.Append("-/");
+                    countSinceLastSlash = 0; // Reset the counter after adding "-/"
+                }
+            }
+
+            return result.ToString();
+        }
+
         public void printAllFilesAndDirs()
         {
 

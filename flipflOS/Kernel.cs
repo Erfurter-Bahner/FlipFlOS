@@ -26,7 +26,7 @@ namespace flipflOS
             Console.Clear();
             loadingScreen(5);
             Console.Clear();
-            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe!");
+            Console.WriteLine("Willkommen im FlipFlOS- nutze help fuer Hilfe!");
             start = DateTime.Now;
            
         }
@@ -168,9 +168,15 @@ namespace flipflOS
                     case "clear":
                             Console.Clear();
                         break;
-                        case "loadingScreen":
+                    case "loadingScreen":
                             if (args.Length == 1) break;
                             loadingScreen(int.Parse(args[1]));
+                        break;
+                    case "commands":
+                            commands();
+                        break;
+                    case "commands+":
+                            commandsFull();
                         break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
@@ -420,7 +426,24 @@ namespace flipflOS
                 // Do nothing, just wait
             }
         }
-
+        public void commands()
+        {
+            //schleife durch array aller commands, mit angabe nur vom Namen
+            for (int i = 0; i < CommandManager.commands.Length; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Red; //red für den Namen
+                Console.WriteLine(CommandManager.commands[i].name);
+            }
+        }
+        public void commandsFull()
+        {
+            //schleife durch array aller commands, mit angabe nur vom Namen
+            for (int i = 0; i < CommandManager.commands.Length; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Red; //red für den Namen
+                Console.WriteLine(CommandManager.commands[i].usage);
+            }
+        }
     }
 }
 

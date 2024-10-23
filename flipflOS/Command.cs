@@ -20,7 +20,9 @@ namespace flipflOS
             new Command("mkdir", "mkdir [directory]", "creates subdirectory in current directory."),
             new Command("touch", "touch [file]", "creates File"),
             new Command("writeFile", "writeFile [file] [content]", "writes Strings into destined File"),
-            new Command("readFile", "readFile [file]", "prints content of file")
+            new Command("readFile", "readFile [file]", "prints content of file"),
+            new Command("commands", "commands", "list all available commands"),
+            new Command("commands+","commands+","list all available commands with usage")
         };
         public static Command getCommand(String name)
         {

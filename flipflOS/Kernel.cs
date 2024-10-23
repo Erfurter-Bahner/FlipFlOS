@@ -26,7 +26,7 @@ namespace flipflOS
             Console.Clear();
             loadingScreen(5);
             Console.Clear();
-            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe!");
+            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe! Test");
             start = DateTime.Now;
            
         }

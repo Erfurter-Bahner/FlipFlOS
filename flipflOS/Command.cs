@@ -22,7 +22,7 @@ namespace flipflOS
             new Command("writeFile", "writeFile [file] [content]", "writes Strings into destined File"),
             new Command("readFile", "readFile [file]", "prints content of file"),
             new Command("commands", "commands", "list all available commands"),
-            new Command("commands+","commands+","list all available commands with usage")
+            new Command("commands+","commands+","list all available commands with usage"),
             new Command("clear","clear","clears whole Terminal"),
             new Command("loadingScreen","loadingScreen [seconds]","shows the Loading Screen for given seconds")
         };

@@ -37,6 +37,34 @@ namespace flipflOS
             "                         /@@&        @@@@@@#             #%%@@@@@@(@            ",
             "                            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    ",
         };
+        String[] logo2 =
+        {
+            "                              /@@@@@/@@@@@@@@@@@@@@@%                           ",
+            "                           %@@&@/      (@@@@@@@@#@/@@#@@@@@@@@&@(               ",
+            "                        #@@#        &@@@@@                    @@@@@@@@.         ",
+            "                       @@@      &@@@@@@                            @@@@@@@%     ",
+            "                       @@&@@@@@@@@@@*                                  @@@@@&   ",
+            "                       @@    #@@@@@%                                     (@@@@& ",
+            "                       %@@      &@@@@@@@@@%                                @@@@ ",
+            "                        @@@&        #@@@@@@@@@@@@@                       &@@@@, ",
+            "                          %@@@@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@          @@@@@%.   ",
+            "                                                            /@@@@%@@@@@@        ",
+            "",
+            "",
+            "",
+            "",
+            "                                          *@@&@@@@@@&.                          ",
+            "       .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@          @@@@@@                      ",
+            "      @@&        @@@@@@@@(@@@@@@.                      &@@@/                    ",
+            "     @@       @@@@@@@@@@@                               @@@@&                   ",
+            "     @@   (&@@@@@.                                     @@@@@@                   ",
+            "     @@@@@@@@@@@@@                                  .#@@@@@                     ",
+            "     %@@      #@@@@@&                            /@@@@@(                        ",
+            "      @@@@       (@@@@@,                   /%@@@@@&@                            ",
+            "        *@@@&(.     &@@@@@@@@#@,/@@#@@@@@@@@@@,                                 ",
+            "            @@@@@@&@@@@@@@@@@@@@@@,                                             ",
+
+        };
         protected override void BeforeRun()
         {
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
@@ -387,52 +415,31 @@ namespace flipflOS
                 loadingScreen(8);
                 seconds -= 8;
             }
-            int centerX = Console.WindowWidth / 2;
-            int centerY = 12;
-
-            int[] posX = new int[] { centerX - 1, centerX-1,centerX,centerX+1,centerX+1,centerX+1,centerX,centerX-1};
-            int[] posY = new int[] { centerY, centerY + 1, centerY + 1, centerY + 1, centerY, centerY - 1, centerY -1, centerY - 1 };
-            drawLogo(0,0);
             double startingTime = 0;
             int spinnerIndex = 0;
 
-            for(int i = 0; i<posX.Length; i++)
-            {
-                Console.SetCursorPosition(posX[i], posY[i]);
-                Console.Write("O");
-
-            }
             while (startingTime < seconds)
             {
+                Console.Clear();
+                drawLogo(0, 0, spinnerIndex%2);
 
-                if (spinnerIndex > posX.Length)
-                {
-                    spinnerIndex = 0;
-                }
-                // Set cursor to the middle of the screen
-                Console.SetCursorPosition(posX[spinnerIndex], posY[spinnerIndex]);
-
-                // Draw the current spinner character
-                Console.Write(" ");
-
-                // Sleep for 100 milliseconds (20 frames per second)
                 Sleep(5);
-                Console.SetCursorPosition(posX[spinnerIndex], posY[spinnerIndex]);
                 // Increment the time counter
                 startingTime += 0.1 * 10;
                 spinnerIndex++;
-                // Optional: Clear the spinner before redrawing
-                Console.Write('O'); // Erase the previous spinner before the next frame
             }
             Console.Clear();
             ClearCurrentLine();
         }
-        public void drawLogo(int X, int Y)
+        public void drawLogo(int X, int Y, int type)
         {
             for (int i = 0; i < logo.Length; i++)
             {
                 Console.SetCursorPosition(X, Y);
-                Console.Write(logo[i]);
+                if(type == 0)
+                {
+                    Console.Write(logo[i]);
+                }else Console.Write(logo2[i]);
                 Y++;
             }
         }

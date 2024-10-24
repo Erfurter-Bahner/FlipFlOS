@@ -26,7 +26,7 @@ namespace flipflOS
             Console.Clear();
             loadingScreen(5);
             Console.Clear();
-            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe! Test");
+            Console.WriteLine("Willkommen im FlipFlOS- nutze help für Hilfe!");
             start = DateTime.Now;
            
         }
@@ -168,10 +168,10 @@ namespace flipflOS
                     case "clear":
                             Console.Clear();
                         break;
-                        case "loadingScreen":
-                            if (args.Length == 1) break;
-                            loadingScreen(int.Parse(args[1]));
-                        break;
+                    case "loadingScreen":
+                        if (args.Length == 1) break;
+                        loadingScreen(int.Parse(args[1]));
+                    break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;
@@ -360,7 +360,7 @@ namespace flipflOS
         {
             Console.Clear();
 
-            if(seconds > 5) seconds = 5;
+            if(seconds > 8) seconds = 8;
 
             int centerX = Console.WindowWidth / 2;
             int centerY = Console.WindowHeight / 2;

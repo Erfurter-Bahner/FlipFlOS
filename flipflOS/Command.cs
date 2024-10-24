@@ -23,6 +23,8 @@ namespace flipflOS
             new Command("readFile", "readFile [file]", "prints content of file"),
             new Command("commands", "commands", "list all available commands"),
             new Command("commands+","commands+","list all available commands with usage")
+            new Command("clear","clear","clears whole Terminal"),
+            new Command("loadingScreen","loadingScreen [seconds]","shows the Loading Screen for given seconds")
         };
         public static Command getCommand(String name)
         {

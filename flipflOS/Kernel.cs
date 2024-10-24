@@ -12,13 +12,30 @@ namespace flipflOS
         public Directory currentdir;
         String[] logo =
         {
-            "--------------------------------",
-            "OOO O   OOO OOO OOO O    OOO OOO",
-            "O   O    O  O O O   O    O O O  ",
-            "OOO O    O  OOO OOO O    O O OOO",
-            "O   O    O  O   O   O    O O   O",
-            "O   OOO OOO O   O   OOO  OOO OOO",
-            "--------------------------------",
+            "       ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                                          ",
+            "    @@@@%       &@@@@&@&          *@@@@@@@@@@@.                                 ",
+            "   @@@      .&@@@@@@                       @@@@@@@@                             ",
+            "  @@@    .@@@@@@#                              @@@@@@@,                         ",
+            "  @@@@@@@@@(@                                      &@@@@@                       ",
+            "  @@     @@@@@@@@%@                                  @@@@@                      ",
+            "   @*       %@@@@@@@@@%                              @@@@#                      ",
+            "    @@@@          @@@@@@@@@@@@@@@@                 #@@@@@                       ",
+            "      @@@@@@@@@@@@@@@(      *@@@@@@@@@@@@@@@@@@#@@@@@@                          ",
+            "                                                                                ",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "                           *@@@@@@#@@(@@@*         @@@@@@@@@@@@@@@@@@@@@@@      ",
+            "                         %@@&@        @@@@@@@@@@@@@@@@&@.               @@@@@@  ",
+            "                        @@,       (@@@@@@@@@(                             @@@@& ",
+            "                       &@     /&@@@@@@@%%                                 &@@@@.",
+            "                       @@@@@@@@@%.                                      @@@@@*  ",
+            "                       (@@    &&@@@@@@                               &@@@@@@    ",
+            "                        @@@      &&@@@@@#                       .(@@@@@*%       ",
+            "                         /@@&        @@@@@@#             #%%@@@@@@(@            ",
+            "                            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    ",
         };
         protected override void BeforeRun()
         {
@@ -365,15 +382,17 @@ namespace flipflOS
         public void loadingScreen(int seconds)
         {
             Console.Clear();
-
-            if(seconds > 5) seconds = 5;
-
+            while(seconds > 8)
+            {
+                loadingScreen(8);
+                seconds -= 8;
+            }
             int centerX = Console.WindowWidth / 2;
-            int centerY = Console.WindowHeight / 2;
+            int centerY = 12;
 
             int[] posX = new int[] { centerX - 1, centerX-1,centerX,centerX+1,centerX+1,centerX+1,centerX,centerX-1};
             int[] posY = new int[] { centerY, centerY + 1, centerY + 1, centerY + 1, centerY, centerY - 1, centerY -1, centerY - 1 };
-            drawLogo(centerX - 16, centerY - 9);
+            drawLogo(0,0);
             double startingTime = 0;
             int spinnerIndex = 0;
 

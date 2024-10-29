@@ -210,6 +210,9 @@ namespace flipflOS
                     case "readFile":
                         readFile(args[1]);
                         break;
+                    case "removeFile":
+                        removeFile(args[1]);
+                    break;
                     case "clear":
                             Console.Clear();
                         break;
@@ -274,6 +277,18 @@ namespace flipflOS
             ushort index = Convert.ToUInt16(args[1]);
 
             return mem.readAt(index);
+        }
+        public void removeFile(String path)
+        {
+            Directory startingdir = currentdir;
+            String[] seperatedbyslash = path.Split("/");
+            String file = seperatedbyslash[seperatedbyslash.Length - 1];
+            for(int i = 0;i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]);
+            }
+            currentdir.removeFile(file);
+            currentdir = startingdir;
         }
         public void createRoot()
         { //erstellt alle nötigen verzeichnisse für das dateisystem

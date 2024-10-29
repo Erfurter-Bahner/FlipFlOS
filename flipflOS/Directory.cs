@@ -66,6 +66,28 @@ namespace flipflOS
             }
             return path;
         }
+        public void removeFile(String name)
+        {
+            if (name == null) return;
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].name == name)
+                { //if FIle has the same name delete it
+                    //go ahead and shorten the array by 1
+                    File[] newfiles = new File[files.Length - 1];
+                    for (int j = 0; j < i; j++)
+                    {
+                        newfiles[j] = files[j];
+                    }
+                    for(int j = i; j<files.Length - 1; j++)
+                    {
+                        newfiles[j] = files[j + 1];
+                    }
+                    files = newfiles;
+                    break;
+                }
+            }
+        }
         public File getFile(String filename)
         {
             if (filename == null || this.files == null)

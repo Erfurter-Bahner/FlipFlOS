@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Sys = Cosmos.System;
 
@@ -147,6 +148,16 @@ namespace flipflOS
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write(currentdir.getPath() + " : ");
                                 Console.ResetColor();
+                            }
+                            break;
+
+                        case ConsoleKey.Tab:
+                            string autoCompletePart = HandleTabCompletion(currentInput);
+                            if (!string.IsNullOrEmpty(autoCompletePart))
+                            {
+                                // Vervollständigen und auf der Konsole anzeigen
+                                Console.Write(autoCompletePart);
+                                currentInput += autoCompletePart; // Update userInput mit dem vervollständigten Teil
                             }
                             break;
 
@@ -469,6 +480,19 @@ namespace flipflOS
                 Console.ForegroundColor = ConsoleColor.Red; //red für den Namen
                 Console.WriteLine(CommandManager.commands[i].usage);
             }
+        }
+        public string HandleTabCompletion(string userInput)
+        {
+            foreach (var command in CommandManager.commands) //Suchschleife durch die Commands
+            {
+                if (command.name.StartsWith(userInput))
+                {
+                    // Ergänzt die Benutzereingabe um den fehlenden Teil des Befehls
+                    return command.name.Substring(userInput.Length);
+                }
+            }
+            // Gibt eine leere Zeichenfolge zurück, wenn keine Übereinstimmung gefunden wird
+            return string.Empty;
         }
     }
 }

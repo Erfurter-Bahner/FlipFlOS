@@ -372,7 +372,6 @@ namespace flipflOS
                     currentdir = dir; //sucht nach dem subdirectory und setzt pointer von currentdir auf ihn.
                     return;
                 }
-                Console.WriteLine("Directory not found");
             }
 
         }

@@ -115,6 +115,7 @@ namespace flipflOS
             {
                 if (f.name == filename) return f;
             }
+            Console.WriteLine("File not found");
             return null;
         }
 

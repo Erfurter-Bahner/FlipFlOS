@@ -21,6 +21,8 @@ namespace flipflOS
             new Command("touch", "touch [file]", "creates File"),
             new Command("writeFile", "writeFile [file] [content]", "writes Strings into destined File"),
             new Command("readFile", "readFile [file]", "prints content of file"),
+            new Command("removeFile","removeFile [file or dir with File]","removes File in current or other directory"),
+            new Command("moveFile","moveFile [file or dir with File] [destination]","moves File to destined directory"),
             new Command("commands", "commands", "list all available commands"),
             new Command("commands+","commands+","list all available commands with usage"),
             new Command("clear","clear","clears whole Terminal"),

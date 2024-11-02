@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
 
@@ -213,6 +214,9 @@ namespace flipflOS
                     case "removeFile":
                         removeFile(args[1]);
                     break;
+                    case "moveFile":
+                        moveFile(args);
+                        break;
                     case "clear":
                             Console.Clear();
                         break;
@@ -280,15 +284,44 @@ namespace flipflOS
         }
         public void removeFile(String path)
         {
-            Directory startingdir = currentdir;
-            String[] seperatedbyslash = path.Split("/");
-            String file = seperatedbyslash[seperatedbyslash.Length - 1];
+            Directory startingdir = currentdir; //speichert startverzeichnis um später zurückzukommen
+            String[] seperatedbyslash = path.Split("/"); //teilt pfad in unterOrdner
+            String file = seperatedbyslash[seperatedbyslash.Length - 1]; //speichert Dateiname
             for(int i = 0;i < seperatedbyslash.Length - 1; i++)
             {
-                changeDir(seperatedbyslash[i]);
+                changeDir(seperatedbyslash[i]); //geht zum Pfad wo die Datei ist
             }
-            currentdir.removeFile(file);
-            currentdir = startingdir;
+            currentdir.removeFile(file); //löscht File
+            currentdir = startingdir; //geht wieder zum Startverzeichnis
+        }
+        public void moveFile(String[] args)
+        {
+            String path = args[1];        //nimmt die argumente
+            String destination = args[2];
+
+            Directory startingdir = currentdir;
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+            String file = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if(currentdir.getFile(file) == null)
+            {
+                return;
+            }
+            Directory.File movingFile = currentdir.getFile(file); //speichert Datei in einer temporären Variable
+            currentdir.removeFile(file); //löscht im ersten Verzeichnis
+            currentdir = startingdir; //fängt von vorne an
+
+            seperatedbyslash = destination.Split("/"); //teilt zielPfad 
+            for (int i = 0; i < seperatedbyslash.Length; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zum Zielpfad
+            }
+            currentdir.addFile(movingFile); //speichert Datei dort
+            currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
         public void createRoot()
         { //erstellt alle nötigen verzeichnisse für das dateisystem
@@ -326,6 +359,11 @@ namespace flipflOS
                 {
                     currentdir = currentdir.parent; //wenn .. dann ins parentdir
                 }
+                return;
+            }
+            if( directory == ".")
+            {
+                return;
             }
             foreach (var dir in currentdir.subdirectories)
             {
@@ -334,6 +372,7 @@ namespace flipflOS
                     currentdir = dir; //sucht nach dem subdirectory und setzt pointer von currentdir auf ihn.
                     return;
                 }
+                Console.WriteLine("Directory not found");
             }
 
         }
@@ -359,6 +398,10 @@ namespace flipflOS
         }
         public void readFile(String filename)
         { //liest den dateiinhalt und gibt ihn aus
+            if(currentdir.getFile(filename) == null)
+            {
+                return; //bricht direkt ab, wenn Datei nicht gefunden wird
+            }
             Console.WriteLine(currentdir.getFile(filename).name + ": ");
             for (int i = 0; i < currentdir.getFile(filename).content.Length; i++)
             {

@@ -66,6 +66,22 @@ namespace flipflOS
             }
             return path;
         }
+        public void addFile(File file)
+        {
+            if (file == null) return;
+            if(files == null)
+            {
+                this.files = new File[] { file };
+                return;
+            }
+            File[] newFiles = new File[files.Length + 1];
+            for(int i = 0; i < files.Length; i++) 
+            {
+                newFiles[i] = files[i];
+            }
+            newFiles[newFiles.Length - 1] = file;
+            this.files = newFiles;
+        }
         public void removeFile(String name)
         {
             if (name == null) return;
@@ -92,6 +108,7 @@ namespace flipflOS
         {
             if (filename == null || this.files == null)
             {
+                Console.WriteLine("File not found");
                 return null;
             }
             foreach (File f in this.files)
@@ -100,6 +117,7 @@ namespace flipflOS
             }
             return null;
         }
+
 
         public class File
         {

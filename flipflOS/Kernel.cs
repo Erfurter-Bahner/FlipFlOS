@@ -83,7 +83,6 @@ namespace flipflOS
             List<string> commandHistory = new List<string>();
             int historyIndex = -1;  //commandHistory für pfeiltasten-navigation
             string currentInput = "";
-            int cursorPosition = 0; // Cursor position within currentInput
 
             while (true)
             {
@@ -105,144 +104,63 @@ namespace flipflOS
                                 commandHistory.Add(currentInput);
                                 historyIndex = commandHistory.Count;
                             }
-                            cursorPosition = 0;
                             break;
 
                         case ConsoleKey.Backspace:
-                            if (cursorPosition > 0)
+                            if (currentInput.Length > 0)
                             {
-                                currentInput = currentInput.Remove(cursorPosition - 1, 1);
-                                cursorPosition--;
-                                UpdateInputDisplay();
+                                currentInput = currentInput.Substring(0, currentInput.Length - 1);
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
                             }
                             break;
 
-                        case ConsoleKey.Delete:
-                            if (cursorPosition < currentInput.Length)
-                            {
-                                currentInput = currentInput.Remove(cursorPosition, 1);
-                                UpdateInputDisplay();
-                            }
-                            break;
-
-                        case ConsoleKey.UpArrow: // Fetch previous command from history
+                        case ConsoleKey.UpArrow: //schreibt letzten command 
                             if (historyIndex > 0)
                             {
                                 historyIndex--;
-                                currentInput = commandHistory[historyIndex];
-                                cursorPosition = currentInput.Length; // Move cursor to end of command
-                                UpdateInputDisplay();
+                                currentInput = commandHistory[historyIndex]; // Fetch command from history
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
                             }
                             break;
 
-                        case ConsoleKey.DownArrow: // Fetch next command from history
+                        case ConsoleKey.DownArrow: //schreibt nächsten command
                             if (historyIndex < commandHistory.Count - 1)
                             {
                                 historyIndex++;
-                                currentInput = commandHistory[historyIndex];
-                                cursorPosition = currentInput.Length; // Move cursor to end of command
-                                UpdateInputDisplay();
+                                currentInput = commandHistory[historyIndex]; // Fetch next command from history
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath());
+                                Console.ResetColor();
+                                Console.Write(" : " + currentInput);
                             }
                             else
                             {
-                                currentInput = "";
-                                cursorPosition = 0;
-                                UpdateInputDisplay();
-                            }
-                            break;
-
-                        case ConsoleKey.LeftArrow:
-                            if (cursorPosition > 0)
-                            {
-                                cursorPosition--;
-                                UpdateInputDisplay();
-                            }
-                            break;
-
-                        case ConsoleKey.RightArrow:
-                            if (cursorPosition < currentInput.Length)
-                            {
-                                cursorPosition++;
-                                UpdateInputDisplay();
-                            }
-                            break;
-
-                        case ConsoleKey.Tab:
-                            string autoCompletePart = HandleTabCompletion(currentInput);
-                            if (!string.IsNullOrEmpty(autoCompletePart))
-                            {
-                                // Vervollständigen und auf der Konsole anzeigen
-                                Console.Write(autoCompletePart);
-                                currentInput += autoCompletePart; // Update userInput mit dem vervollständigten Teil
+                                currentInput = ""; // No more commands, clear input
+                                ClearCurrentLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(currentdir.getPath() + " : ");
+                                Console.ResetColor();
                             }
                             break;
 
                         default:
-                            // Insert the character at the cursor position
-                            if (key.KeyChar != '\0') // Ignore non-character keys
-                            {
-                                currentInput = currentInput.Insert(cursorPosition, key.KeyChar.ToString());
-                                cursorPosition++;
-                                UpdateInputDisplay();
-                            }
+                            currentInput += key.KeyChar;
+                            Console.Write(key.KeyChar);
                             break;
                     }
                     if (key.Key == ConsoleKey.Enter) // End the loop after an "Enter" press
                     {
                         break;
                     }
-                    void UpdateInputDisplay()
-                    {
-                        int consoleWidth = Console.WindowWidth;
-
-                        // Calculate the total length of the prompt and input
-                        int totalLength = currentdir.getPath().Length + 3 + currentInput.Length;
-
-                        // Determine how many lines are needed to display the prompt and input
-                        int currentLineCursor = Console.CursorTop;
-                        int linesUsed = totalLength / consoleWidth + (totalLength % consoleWidth > 0 ? 1 : 0);
-
-                        // Clear the lines used by the current input
-                        for (int i = 0; i < linesUsed; i++)
-                        {
-                            Console.SetCursorPosition(0, currentLineCursor - i);
-                            Console.Write(new string(' ', consoleWidth));
-                        }
-                        Console.SetCursorPosition(0, currentLineCursor - (linesUsed - 1));
-
-                        // Print the prompt and current input text
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(currentdir.getPath());
-                        Console.ResetColor();
-                        Console.Write(" : ");
-
-                        // Display the input, handling wrapping manually
-                        int promptLength = currentdir.getPath().Length + 3; // Length of "prompt : "
-                        for (int i = 0; i < currentInput.Length; i++)
-                        {
-                            // If the next character would exceed the console width, move to the next line
-                            if ((promptLength + i) % consoleWidth == 0)
-                            {
-                                Console.WriteLine();
-                            }
-                            Console.Write(currentInput[i]);
-                        }
-
-                        // Calculate the cursor's actual position, handling line wrapping
-                        int cursorAbsolutePosition = promptLength + cursorPosition;
-                        int cursorLineOffset = cursorAbsolutePosition / consoleWidth; // Number of lines down
-                        int cursorColumnPosition = cursorAbsolutePosition % consoleWidth; // Column position
-
-                        // Adjust the cursor position within bounds
-                        int cursorYPosition = Console.CursorTop - ((currentInput.Length + promptLength) / consoleWidth) + cursorLineOffset;
-                        if (cursorYPosition >= 0)
-                        {
-                            Console.SetCursorPosition(cursorColumnPosition, cursorYPosition);
-                        }
-                    }
-
-
-
                 }
 
 

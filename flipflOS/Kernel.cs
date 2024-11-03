@@ -294,7 +294,7 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //geht zum Pfad wo die Datei ist
             }
-            currentdir.removeFile(file); //löscht File
+            currentdir.deleteFile(file); //löscht File
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
         public void moveFile(String[] args)
@@ -325,7 +325,7 @@ namespace flipflOS
             }
             if (currentdir.addFile(movingFile))  //speichert Datei dort, falls es funtktioniert dann
             {
-                firstFileDirectory.removeFile(file); //wird die Datei aus dem vorherigem Verzeichnis gelöscht
+                firstFileDirectory.deleteFile(file); //wird die Datei aus dem vorherigem Verzeichnis gelöscht
             }
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }

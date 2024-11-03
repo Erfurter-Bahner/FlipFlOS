@@ -213,16 +213,19 @@ namespace flipflOS
                         break;
                     case "removeFile":
                         removeFile(args[1]);
-                    break;
+                        break;
                     case "moveFile":
                         moveFile(args);
                         break;
+                    case "copyFile":
+                        copyFile(args);
+                        break;
                     case "clear":
-                            Console.Clear();
+                        Console.Clear();
                         break;
                     case "loadingScreen":
-                            if (args.Length == 1) break;
-                            loadingScreen(int.Parse(args[1]));
+                        if (args.Length == 1) break;
+                        loadingScreen(int.Parse(args[1]));
                         break;
                     case "commands":
                             commands();
@@ -312,7 +315,7 @@ namespace flipflOS
                 return;
             }
             Directory.File movingFile = currentdir.getFile(file); //speichert Datei in einer temporären Variable
-            currentdir.removeFile(file); //löscht im ersten Verzeichnis
+            Directory firstFileDirectory = currentdir; //speichert directory von File ab, falls Zieldir bereits Datei mit namen beinhaltet.
             currentdir = startingdir; //fängt von vorne an
 
             seperatedbyslash = destination.Split("/"); //teilt zielPfad 
@@ -320,7 +323,39 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //bewegt currentdir zum Zielpfad
             }
-            currentdir.addFile(movingFile); //speichert Datei dort
+            if (currentdir.addFile(movingFile))  //speichert Datei dort, falls es funtktioniert dann
+            {
+                firstFileDirectory.removeFile(file); //wird die Datei aus dem vorherigem Verzeichnis gelöscht
+            }
+            currentdir = startingdir; //geht wieder zum Startverzeichnis
+        }
+        public void copyFile(String[] args)
+        {
+            String path = args[1];        //nimmt die argumente
+            String destination = args[2];
+
+            Directory startingdir = currentdir;
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+            String file = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(file) == null)
+            {
+                return;
+            }
+            Directory.File movingFile = currentdir.getFile(file); //speichert Datei in einer temporären Variable
+            Directory firstFileDirectory = currentdir; //speichert directory von File ab, falls Zieldir bereits Datei mit namen beinhaltet.
+            currentdir = startingdir; //fängt von vorne an
+
+            seperatedbyslash = destination.Split("/"); //teilt zielPfad 
+            for (int i = 0; i < seperatedbyslash.Length; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zum Zielpfad
+            }
+            currentdir.addFile(movingFile); //speichert Datei ab, wenn möglich.
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
         public void createRoot()

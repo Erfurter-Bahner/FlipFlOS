@@ -66,13 +66,21 @@ namespace flipflOS
             }
             return path;
         }
-        public void addFile(File file)
+        public bool addFile(File file)
         {
-            if (file == null) return;
+            if (file == null) return false;
             if(files == null)
             {
                 this.files = new File[] { file };
-                return;
+                return false;
+            }
+            foreach(File f in files)
+            {
+                if(file.name == f.name)
+                {
+                    Console.WriteLine("File already exists");
+                    return false;
+                }
             }
             File[] newFiles = new File[files.Length + 1];
             for(int i = 0; i < files.Length; i++) 
@@ -81,6 +89,7 @@ namespace flipflOS
             }
             newFiles[newFiles.Length - 1] = file;
             this.files = newFiles;
+            return true;
         }
         public void removeFile(String name)
         {
@@ -88,7 +97,7 @@ namespace flipflOS
             for (int i = 0; i < files.Length; i++)
             {
                 if (files[i].name == name)
-                { //if FIle has the same name delete it
+                { //if File has the same name delete it
                     //go ahead and shorten the array by 1
                     File[] newfiles = new File[files.Length - 1];
                     for (int j = 0; j < i; j++)
@@ -100,9 +109,10 @@ namespace flipflOS
                         newfiles[j] = files[j + 1];
                     }
                     files = newfiles;
-                    break;
+                    return;                 //beendet funktion wenn Datei gefunden wurde und gelöscht wurde.
                 }
             }
+            Console.WriteLine("File does not exist"); //wird nur erreicht wenn kein name equals.
         }
         public File getFile(String filename)
         {

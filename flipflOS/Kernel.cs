@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
@@ -119,7 +120,7 @@ namespace flipflOS
 
                         case ConsoleKey.UpArrow: //schreibt letzten command 
                             if (historyIndex > 0)
-                            { 
+                            {
                                 historyIndex--;
                                 currentInput = commandHistory[historyIndex]; // Fetch command from history
                                 ClearCurrentLine();
@@ -156,7 +157,6 @@ namespace flipflOS
                             Console.Write(key.KeyChar);
                             break;
                     }
-
                     if (key.Key == ConsoleKey.Enter) // End the loop after an "Enter" press
                     {
                         break;
@@ -294,7 +294,7 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //geht zum Pfad wo die Datei ist
             }
-            currentdir.removeFile(file); //löscht File
+            currentdir.deleteFile(file); //löscht File
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
         public void moveFile(String[] args)
@@ -325,7 +325,7 @@ namespace flipflOS
             }
             if (currentdir.addFile(movingFile))  //speichert Datei dort, falls es funtktioniert dann
             {
-                firstFileDirectory.removeFile(file); //wird die Datei aus dem vorherigem Verzeichnis gelöscht
+                firstFileDirectory.deleteFile(file); //wird die Datei aus dem vorherigem Verzeichnis gelöscht
             }
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
@@ -561,6 +561,19 @@ namespace flipflOS
                 Console.ForegroundColor = ConsoleColor.Red; //red für den Namen
                 Console.WriteLine(CommandManager.commands[i].usage);
             }
+        }
+        public string HandleTabCompletion(string userInput)
+        {
+            foreach (var command in CommandManager.commands) //Suchschleife durch die Commands
+            {
+                if (command.name.StartsWith(userInput))
+                {
+                    // Ergänzt die Benutzereingabe um den fehlenden Teil des Befehls
+                    return command.name.Substring(userInput.Length);
+                }
+            }
+            // Gibt eine leere Zeichenfolge zurück, wenn keine Übereinstimmung gefunden wird
+            return string.Empty;
         }
     }
 }

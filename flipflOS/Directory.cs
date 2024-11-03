@@ -91,7 +91,7 @@ namespace flipflOS
             this.files = newFiles;
             return true;
         }
-        public void removeFile(String name)
+        public void deleteFile(String name)
         {
             if (name == null) return;
             for (int i = 0; i < files.Length; i++)

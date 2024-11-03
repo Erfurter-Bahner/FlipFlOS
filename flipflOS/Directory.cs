@@ -66,18 +66,69 @@ namespace flipflOS
             }
             return path;
         }
+        public bool addFile(File file)
+        {
+            if (file == null) return false;
+            if(files == null)
+            {
+                this.files = new File[] { file };
+                return false;
+            }
+            foreach(File f in files)
+            {
+                if(file.name == f.name)
+                {
+                    Console.WriteLine("File already exists");
+                    return false;
+                }
+            }
+            File[] newFiles = new File[files.Length + 1];
+            for(int i = 0; i < files.Length; i++) 
+            {
+                newFiles[i] = files[i];
+            }
+            newFiles[newFiles.Length - 1] = file;
+            this.files = newFiles;
+            return true;
+        }
+        public void deleteFile(String name)
+        {
+            if (name == null) return;
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].name == name)
+                { //if File has the same name delete it
+                    //go ahead and shorten the array by 1
+                    File[] newfiles = new File[files.Length - 1];
+                    for (int j = 0; j < i; j++)
+                    {
+                        newfiles[j] = files[j];
+                    }
+                    for(int j = i; j<files.Length - 1; j++)
+                    {
+                        newfiles[j] = files[j + 1];
+                    }
+                    files = newfiles;
+                    return;                 //beendet funktion wenn Datei gefunden wurde und gelöscht wurde.
+                }
+            }
+            Console.WriteLine("File does not exist"); //wird nur erreicht wenn kein name equals.
+        }
         public File getFile(String filename)
         {
             if (filename == null || this.files == null)
             {
+                Console.WriteLine("File not found");
                 return null;
             }
             foreach (File f in this.files)
             {
                 if (f.name == filename) return f;
             }
+            Console.WriteLine("File not found");
             return null;
         }
+
 
         public class File
         {

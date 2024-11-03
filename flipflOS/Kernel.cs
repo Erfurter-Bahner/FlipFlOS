@@ -69,8 +69,6 @@ namespace flipflOS
         };
         protected override void BeforeRun()
         {
-            Console.BufferWidth = 200; // Set the buffer width to 200 characters
-            Console.WindowWidth = 200; // Set the window width to 200 characters
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
             Console.Clear();
             loadingScreen(5);

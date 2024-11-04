@@ -220,6 +220,9 @@ namespace flipflOS
                     case "copyFile":
                         copyFile(args);
                         break;
+                    case "edit":
+                        editFile(args);
+                        break;
                     case "clear":
                         Console.Clear();
                         break;
@@ -441,6 +444,14 @@ namespace flipflOS
             {
                 Console.WriteLine(currentdir.getFile(filename).content[i]);
             }
+        }
+        public void editFile(String[] args)
+        {
+            if (args.Length <= 1) return;
+            Directory.File file = currentdir.getFile(args[1]); // am ende bitte mit directory verschiebung !!!
+            Directory.File newfile = new FileEditor().startFileeditor(file);
+            currentdir.deleteFile(file.name);
+            currentdir.addFile(newfile);
         }
         public string AddSeparator(string input)
         {

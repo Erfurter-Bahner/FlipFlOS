@@ -24,6 +24,7 @@ namespace flipflOS
             new Command("removeFile","removeFile [file or dir with File]","removes File in current or other directory"),
             new Command("moveFile","moveFile [file or dir with File] [destination]","moves File to destined directory"),
             new Command("copyFile","copyFle [file or dir with File] [destination]","copies File to destined directory"),
+            new Command("edit","edit [file]","starts file editor for the file"),
             new Command("commands", "commands", "list all available commands"),
             new Command("commands+","commands+","list all available commands with usage"),
             new Command("clear","clear","clears whole Terminal"),

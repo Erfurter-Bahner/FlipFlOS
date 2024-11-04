@@ -447,7 +447,7 @@ namespace flipflOS
         }
         public void editFile(String[] args)
         {
-            if (args.Length <= 1) return;
+            if (args.Length <= 1 || currentdir.getFile(args[1]) == null) return;
             Directory.File file = currentdir.getFile(args[1]); // am ende bitte mit directory verschiebung !!!
             Directory.File newfile = new FileEditor().startFileeditor(file);
             currentdir.deleteFile(file.name);

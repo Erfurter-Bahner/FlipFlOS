@@ -12,6 +12,7 @@ namespace flipflOS
         int cursorX = 0; //cursir Position speichern
         int cursorY = 0;
         Char[][] Inhalt;
+        bool lastkeyarrow = false;
         public Directory.File startFileeditor(Directory.File file)
         {
             editingFile = file; //objektvariable wird gesetzt
@@ -31,43 +32,72 @@ namespace flipflOS
         public void run()
         {
             bool running = true;
+            printFile(); // soll einmal printen, dann nurnoch die zeile ändern
             while (running)
             {
-                printFile();
                 Console.SetCursorPosition(cursorX, cursorY);
-                var key = Console.ReadKey(intercept: true); //input erkennung für mögliche Eingabe von Pfeil hoch, runter und Backspace
+                var key = Console.ReadKey(intercept: true); // Capture key without displaying it
                 switch (key.Key)
                 {
-                    case ConsoleKey.Enter://new line
+                    case ConsoleKey.Enter: // new line
+                        //muss noch umgesetzt werden
+                        cursorX = 0;
+                        if (cursorY < Inhalt.Length - 1)
+                        {
+                            cursorY++;
+                        }
+                        else
+                        {
+                            cursorY = 0;
+                        }
+                        lastkeyarrow = true;
                         break;
 
-                    case ConsoleKey.Backspace: //soll char löschen und cursor nach links
+                    case ConsoleKey.Backspace: // delete character and move cursor left
+                        if (cursorX > 0) // Ensure cursor is not at the start
+                        {
+                            cursorX--;
+                            writeInhalt(cursorY, cursorX, ' '); // Replace with space
+                        }
                         break;
 
-                    case ConsoleKey.UpArrow: //soll cursor nach oben gehen lassen
+                    case ConsoleKey.UpArrow: // Move cursor up
                         if (cursorY > 0) cursorY--;
-                        break;
-                        
-                    case ConsoleKey.DownArrow: //soll cursor nach unten gehen lassen
-                        if (cursorY < 40) cursorY++;
+                        lastkeyarrow = true;
                         break;
 
-                    case ConsoleKey.RightArrow: //soll cursor nach rechts gehen lassen
-                        if (cursorX < 80) cursorX++;
+                    case ConsoleKey.DownArrow: // Move cursor down
+                        if (cursorY < Inhalt.Length - 1) cursorY++;
+                        lastkeyarrow = true;
                         break;
 
-                    case ConsoleKey.LeftArrow: //soll cursor nach links gehen lassen
+                    case ConsoleKey.RightArrow: // Move cursor right
+                        if (cursorX < 79) cursorX++;
+                        lastkeyarrow = true;
+                        break;
+
+                    case ConsoleKey.LeftArrow: // Move cursor left
                         if (cursorX > 0) cursorX--;
+                        lastkeyarrow = true;
                         break;
-                    case ConsoleKey.Escape:
-                        running = false; //beendet Programm
+
+                    case ConsoleKey.Escape: // Exit
+                        running = false;
                         break;
+
                     default:
-                        writeInhalt(cursorX, cursorY, key.KeyChar);
+                        if (!char.IsControl(key.KeyChar)) // Only write non-control characters
+                        {
+                            writeInhalt(cursorY, cursorX, key.KeyChar);
+                            if (cursorX < 79) cursorX++; // Move cursor right after writing
+                        }
+                        printLine(cursorY, cursorX);
+                        lastkeyarrow = false;
                         break;
                 }
             }
         }
+
         public Directory.File stop()
         {
             Console.Clear(); // clears terminal prior to returning to standard Programm
@@ -83,49 +113,83 @@ namespace flipflOS
                 {
                     Console.Write(c);
                 }
-                Console.WriteLine();
             }
+        }
+        public void printLine(int line, int posX)
+        {
+            for(int i = 0;i < Inhalt[line].Length; i++)
+            {
+                Console.SetCursorPosition(i, line);
+                Console.Write(Inhalt[line][i]);
+            }
+
+            Console.SetCursorPosition(posX, line);
         }
         public void writeInhalt(int posY, int posX, char character)
         {
-            if (this.Inhalt == null || this.Inhalt.Length - 1 < posY || this.Inhalt[posX].Length - 1 < posX) return; // wenn inhalt noch nicht init, oder leer, brich ab
-            this.Inhalt[posY][posX] = character;
-    
+            // Ensure the cursor positions are within bounds of Inhalt's dimensions
+            if (Inhalt == null || posY >= Inhalt.Length || posX >= Inhalt[posY].Length)
+            {
+                return; // Exit if positions are out of bounds
+            }
+
+            // Assign the character to the specified position
+            Inhalt[posY][posX] = character;
         }
+
         public static string[] Char2DToStringArray(char[][] charArray)
         {
-            // Initialize the string array with the same number of rows as charArray
-            string[] stringArray = new string[charArray.Length];
+            // Initialize a list to store non-empty lines
+            List<string> stringList = new List<string>();
 
             for (int i = 0; i < charArray.Length; i++)
             {
-                // Convert each row (char array) to a string, trimming trailing spaces
-                stringArray[i] = new string(charArray[i]).TrimEnd();
+                // Convert each row (char array) to a string
+                string line = new string(charArray[i]).TrimEnd();
+
+                // Add the line to the list only if it contains non-space characters
+                if (!string.IsNullOrEmpty(line))
+                {
+                    stringList.Add(line);
+                }
             }
 
-            return stringArray;
+            // Convert the list back to an array and return
+            return stringList.ToArray();
         }
+
 
         public static char[][] StringArrayToChar2D(string[] stringArray)
         {
             // Initialize the 2D char array
-            char[][] charArray = new char[stringArray.Length][];
+            char[][] charArray = new char[20][];
 
-            for (int i = 0; i < stringArray.Length; i++)
+            for (int i = 0; i < 20; i++)
             {
                 // Initialize each row to a length of 80
                 charArray[i] = new char[80];
 
                 // Copy characters from the string to the char array
-                for (int j = 0; j < stringArray[i].Length && j < 80; j++)
+                if(i < stringArray.Length)
                 {
-                    charArray[i][j] = stringArray[i][j];
-                }
+                    for (int j = 0; j < stringArray[i].Length && j < 80; j++)
+                    {
+                        charArray[i][j] = stringArray[i][j];
+                    }
 
-                // Optional: fill the remaining spaces with ' ' (space) if the string is shorter than 80
-                for (int j = stringArray[i].Length; j < 80; j++)
+                    // Optional: fill the remaining spaces with ' ' (space) if the string is shorter than 80
+                    for (int j = stringArray[i].Length; j < 80; j++)
+                    {
+                        charArray[i][j] = ' ';
+                    }
+
+                }
+                else
                 {
-                    charArray[i][j] = ' ';
+                    for (int j = 0; j < 80; j++)
+                    {
+                        charArray[i][j] = ' ';
+                    }
                 }
             }
 

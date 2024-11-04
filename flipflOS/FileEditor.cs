@@ -15,12 +15,21 @@ namespace flipflOS
         Char[][] Inhalt;
 
         bool lastkeyarrow = false;
+<<<<<<< HEAD
         bool saved = false;
         bool confirmedescape = false;
         String[] settings =
         {
             "--------------------------------------------------------------------------------",
             "-| esc to leave | tab to save |  -FlipFlOS-  File Editor | Author: P. Stephan |-",
+=======
+        bool saved = true;
+        String[] settings =
+        {
+            "--------------------------------------------------------------------------------",
+            "-| esc        | tab        |  FlipFlOS inc.                                   |-",
+            "-|  -to leave |  -to save  |                Authors: P. Stephan & N. Di Palma |-",
+>>>>>>> ef5e07629f1b33beb6b8a77c751182a486bb1976
             "--------------------------------------------------------------------------------",
         };
         public Directory.File startFileeditor(Directory.File file)
@@ -94,7 +103,9 @@ namespace flipflOS
                         if (cursorX > 0) cursorX--;
                         lastkeyarrow = true;
                         break;
-
+                    case ConsoleKey.Tab: //saves file
+                        saveChanges();
+                        break;
                     case ConsoleKey.Escape: // Exit
                         if (saved || confirmedescape)
                         {
@@ -171,12 +182,26 @@ namespace flipflOS
                 }
             }
             Console.ForegroundColor = ConsoleColor.Green;
+<<<<<<< HEAD
             for (int i = 21; i < 24; i++)
             {
                 Console.SetCursorPosition(0, i);
                 Console.Write(settings[i - 21]);
             }
             Console.ResetColor();
+=======
+            for (int i = 20; i < 24; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.Write(settings[i - 20]);
+            }
+            Console.ResetColor();
+        }
+        public void saveChanges()
+        {
+            editingFile.content = Char2DToStringArray(Inhalt);
+            saved = true;
+>>>>>>> ef5e07629f1b33beb6b8a77c751182a486bb1976
         }
         public void printLine(int line, int posX)
         {
@@ -204,6 +229,7 @@ namespace flipflOS
         {
             // Initialize a list to store non-empty lines
             List<string> stringList = new List<string>();
+<<<<<<< HEAD
 
             for (int i = 0; i < charArray.Length; i++)
             {
@@ -213,6 +239,8 @@ namespace flipflOS
                
             }
 
+=======
+>>>>>>> ef5e07629f1b33beb6b8a77c751182a486bb1976
             // Convert the list back to an array and return
             return stringList.ToArray();
         }

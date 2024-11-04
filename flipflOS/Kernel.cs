@@ -184,12 +184,13 @@ namespace flipflOS
                         TimeSpan runtime = DateTime.Now - start;
                         Console.WriteLine("running for: " + runtime.TotalSeconds + " seconds"); // gibt sekunden seit systemstart aus
                         break;
-                    case "write":
+ /*                 case "write":
                         writeToMemory(args);
                         break;
                     case "read":
                         Console.WriteLine(readFromMemory(args));
-                        break;
+                        break; 
+ */
                     case "cd":
                         changeDirIterative(args);
                         break;
@@ -205,11 +206,8 @@ namespace flipflOS
                     case "touch":
                         currentdir.createFile(args[1]);
                         break;
-                    case "writeFile":
-                        writeToFile(args);
-                        break;
                     case "readFile":
-                        readFile(args[1]);
+                        editFile(args);
                         break;
                     case "removeFile":
                         removeFile(args[1]);
@@ -432,18 +430,6 @@ namespace flipflOS
             String[] splitbynewlines = content.Split('/');
 
             currentdir.getFile(args[1]).changecontent(splitbynewlines);
-        }
-        public void readFile(String filename)
-        { //liest den dateiinhalt und gibt ihn aus
-            if(currentdir.getFile(filename) == null)
-            {
-                return; //bricht direkt ab, wenn Datei nicht gefunden wird
-            }
-            Console.WriteLine(currentdir.getFile(filename).name + ": ");
-            for (int i = 0; i < currentdir.getFile(filename).content.Length; i++)
-            {
-                Console.WriteLine(currentdir.getFile(filename).content[i]);
-            }
         }
         public void editFile(String[] args)
         {

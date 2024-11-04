@@ -19,7 +19,6 @@ namespace flipflOS
             new Command("ls", "ls", "prints list of all elements in current directory"),
             new Command("mkdir", "mkdir [directory]", "creates subdirectory in current directory."),
             new Command("touch", "touch [file]", "creates File"),
-            new Command("writeFile", "writeFile [file] [content]", "writes Strings into destined File"),
             new Command("readFile", "readFile [file]", "prints content of file"),
             new Command("removeFile","removeFile [file or dir with File]","removes File in current or other directory"),
             new Command("moveFile","moveFile [file or dir with File] [destination]","moves File to destined directory"),

@@ -13,6 +13,14 @@ namespace flipflOS
         int cursorY = 0;
         Char[][] Inhalt;
         bool lastkeyarrow = false;
+        bool saved = true;
+        String[] settings =
+        {
+            "--------------------------------------------------------------------------------",
+            "-| esc        | tab        |  FlipFlOS inc.                                   |-",
+            "-|  -to leave |  -to save  |                Authors: P. Stephan & N. Di Palma |-",
+            "--------------------------------------------------------------------------------",
+        };
         public Directory.File startFileeditor(Directory.File file)
         {
             editingFile = file; //objektvariable wird gesetzt
@@ -80,11 +88,12 @@ namespace flipflOS
                         if (cursorX > 0) cursorX--;
                         lastkeyarrow = true;
                         break;
-
+                    case ConsoleKey.Tab: //saves file
+                        saveChanges();
+                        break;
                     case ConsoleKey.Escape: // Exit
                         running = false;
                         break;
-
                     default:
                         if (!char.IsControl(key.KeyChar)) // Only write non-control characters
                         {
@@ -97,11 +106,9 @@ namespace flipflOS
                 }
             }
         }
-
         public Directory.File stop()
         {
             Console.Clear(); // clears terminal prior to returning to standard Programm
-            editingFile.content = Char2DToStringArray(Inhalt);
             return editingFile; //soll am Ende fertige File zurückgeben
         }
         public void printFile()
@@ -114,6 +121,18 @@ namespace flipflOS
                     Console.Write(c);
                 }
             }
+            Console.ForegroundColor = ConsoleColor.Green;
+            for (int i = 20; i < 24; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.Write(settings[i - 20]);
+            }
+            Console.ResetColor();
+        }
+        public void saveChanges()
+        {
+            editingFile.content = Char2DToStringArray(Inhalt);
+            saved = true;
         }
         public void printLine(int line, int posX)
         {
@@ -141,19 +160,6 @@ namespace flipflOS
         {
             // Initialize a list to store non-empty lines
             List<string> stringList = new List<string>();
-
-            for (int i = 0; i < charArray.Length; i++)
-            {
-                // Convert each row (char array) to a string
-                string line = new string(charArray[i]).TrimEnd();
-
-                // Add the line to the list only if it contains non-space characters
-                if (!string.IsNullOrEmpty(line))
-                {
-                    stringList.Add(line);
-                }
-            }
-
             // Convert the list back to an array and return
             return stringList.ToArray();
         }

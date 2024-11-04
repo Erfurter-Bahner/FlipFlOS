@@ -205,11 +205,8 @@ namespace flipflOS
                     case "touch":
                         currentdir.createFile(args[1]);
                         break;
-                    case "writeFile":
-                        writeToFile(args);
-                        break;
                     case "readFile":
-                        readFile(args[1]);
+                        editFile(args);
                         break;
                     case "removeFile":
                         removeFile(args[1]);
@@ -439,11 +436,7 @@ namespace flipflOS
             {
                 return; //bricht direkt ab, wenn Datei nicht gefunden wird
             }
-            Console.WriteLine(currentdir.getFile(filename).name + ": ");
-            for (int i = 0; i < currentdir.getFile(filename).content.Length; i++)
-            {
-                Console.WriteLine(currentdir.getFile(filename).content[i]);
-            }
+            new FileEditor().readFile(currentdir.getFile(filename));
         }
         public void editFile(String[] args)
         {

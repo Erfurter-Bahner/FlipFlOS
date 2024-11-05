@@ -151,7 +151,15 @@ namespace flipflOS
                                 Console.ResetColor();
                             }
                             break;
-
+                        case ConsoleKey.Tab:
+                            string autoCompletePart = HandleTabCompletion(currentInput);
+                            if (!string.IsNullOrEmpty(autoCompletePart))
+                            {
+                                // Vervollständigen und auf der Konsole anzeigen
+                                Console.Write(autoCompletePart);
+                                currentInput += autoCompletePart; // Update userInput mit dem vervollständigten Teil
+                            }
+                            break;
                         default:
                             currentInput += key.KeyChar;
                             Console.Write(key.KeyChar);

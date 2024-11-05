@@ -168,6 +168,9 @@ namespace flipflOS
                     case "edit":
                         editFile(args);
                         break;
+                    case "rename":
+                        rename(args);
+                        break;
                     case "clear":
                         Console.Clear();
                         break;
@@ -380,22 +383,6 @@ namespace flipflOS
         {
             Console.WriteLine("  "+currentdir.name);
         }
-        public void writeToFile(String[] args)
-        {
-            if (args.Length == 1) return;
-            String content = "";
-
-            for (int i = 2; i < args.Length; i++) //nimmt alle argumente nach "writeFile [file]" und schreibt sie in die datei hinein.
-            {
-                String argument = args[i];
-                content += argument+" ";
-            }
-            //now content has the whole line
-            content = AddSeparator(content);
-            String[] splitbynewlines = content.Split('/');
-
-            currentdir.getFile(args[1]).changecontent(splitbynewlines);
-        }
         public void editFile(String[] args)
         {
             if (args.Length <= 1) return;
@@ -415,45 +402,39 @@ namespace flipflOS
             {
                 return;
             }
-            Directory.File file = currentdir.getFile(fileString); // am ende bitte mit directory verschiebung !!!
+            Directory.File file = currentdir.getFile(fileString);
             Directory.File newfile = new FileEditor().startFileeditor(file);
             currentdir.deleteFile(file.name);
             currentdir.addFile(newfile);
 
             currentdir = startingdir; // zurück zum ersten Directory
         }
-        public string AddSeparator(string input)
+        public void rename(String[] args)
         {
-            StringBuilder result = new StringBuilder();
-            int countSinceLastSlash = 0; // Track the number of characters since the last "/"
-
-            for (int i = 0; i < input.Length; i++)
+            if (args.Length < 3)
             {
-                // Add current character to result
-                result.Append(input[i]);
-
-                // Increase the counter if the character is not '/'
-                if (input[i] != '/')
-                {
-                    countSinceLastSlash++;
-                }
-                else
-                {
-                    // Reset the counter when a '/' is encountered
-                    countSinceLastSlash = 0;
-                }
-
-                // If we've reached 50 characters without a '/', add "-/"
-                if (countSinceLastSlash == 50)
-                {
-                    result.Append("-/");
-                    countSinceLastSlash = 0; // Reset the counter after adding "-/"
-                }
+                Console.WriteLine("Not enough Arguments. Syntax: rename [file] [newname]");
+                return;
             }
+            String path = args[1];        //nimmt die argumente
 
-            return result.ToString();
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
+            }
+            Directory.File file = currentdir.getFile(fileString);
+            file.name = args[2];
+            currentdir = startingdir;
         }
-
         public void printAllFilesAndDirs()
         {
 

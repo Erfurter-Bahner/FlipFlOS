@@ -184,13 +184,6 @@ namespace flipflOS
                         TimeSpan runtime = DateTime.Now - start;
                         Console.WriteLine("running for: " + runtime.TotalSeconds + " seconds"); // gibt sekunden seit systemstart aus
                         break;
- /*                 case "write":
-                        writeToMemory(args);
-                        break;
-                    case "read":
-                        Console.WriteLine(readFromMemory(args));
-                        break; 
- */
                     case "cd":
                         changeDirIterative(args);
                         break;
@@ -201,10 +194,10 @@ namespace flipflOS
                         printAllFilesAndDirs();
                         break;
                     case "mkdir":
-                        currentdir.createSubDirectory(args[1]);
+                        makeDirectory(args);
                         break;
                     case "touch":
-                        currentdir.createFile(args[1]);
+                        makeFile(args);
                         break;
                     case "readFile":
                         editFile(args);
@@ -286,6 +279,24 @@ namespace flipflOS
 
             return mem.readAt(index);
         }
+        public void makeDirectory(String[] args)
+        {
+            if (args.Length <= 1)
+                {
+                    Console.WriteLine("Not enough Arguments. Syntax: mkdir dir");
+                    return;
+                }
+            currentdir.createSubDirectory(args[1]);
+        }
+        public void makeFile(String[] args)
+        {
+            if (args.Length <= 1)
+            {
+                Console.WriteLine("Not enough Arguments. Syntax: touch file");
+                return;
+            }
+            currentdir.createFile(args[1]);
+        }
         public void removeFile(String[] args)
         {
             if (args.Length <= 1) return;
@@ -358,7 +369,7 @@ namespace flipflOS
 
         public void changeDirIterative(String[] args)
         {
-            if (args.Length == 1)
+            if (args.Length <= 1)
             {
                 Console.WriteLine("not enough arguments."); //wenn nur "cd" geschrieben wird, argslength = 1, deswegen funktionsabbruch
                 return;

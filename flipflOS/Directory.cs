@@ -52,7 +52,7 @@ namespace flipflOS
             }
 
             // Add the new file to the last position
-            newFiles[newFiles.Length - 1] = new File(name, new string[]{ });
+            newFiles[newFiles.Length - 1] = new File(name, new string[]{});
             files = newFiles;
         }
         public String getPath()

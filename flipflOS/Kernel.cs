@@ -249,7 +249,20 @@ namespace flipflOS
                 Console.WriteLine("Not enough Arguments. Syntax: touch file");
                 return;
             }
-            currentdir.createFile(args[1]);
+
+            String path = args[1];        //nimmt die argumente
+
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            currentdir.createFile(fileString);
+            currentdir = startingdir;
         }
         public void removeFile(String[] args)
         {

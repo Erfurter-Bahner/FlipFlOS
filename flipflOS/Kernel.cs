@@ -12,61 +12,7 @@ namespace flipflOS
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
-        String[] logo =
-        {
-            "       ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                                          ",
-            "    @@@@%       &@@@@&@&          *@@@@@@@@@@@.                                 ",
-            "   @@@      .&@@@@@@                       @@@@@@@@                             ",
-            "  @@@    .@@@@@@#                              @@@@@@@,                         ",
-            "  @@@@@@@@@(@                                      &@@@@@                       ",
-            "  @@     @@@@@@@@%@                                  @@@@@                      ",
-            "   @*       %@@@@@@@@@%                              @@@@#                      ",
-            "    @@@@          @@@@@@@@@@@@@@@@                 #@@@@@                       ",
-            "      @@@@@@@@@@@@@@@(      *@@@@@@@@@@@@@@@@@@#@@@@@@                          ",
-            "                                                                                ",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "                           *@@@@@@#@@(@@@*         @@@@@@@@@@@@@@@@@@@@@@@      ",
-            "                         %@@&@        @@@@@@@@@@@@@@@@&@.               @@@@@@  ",
-            "                        @@,       (@@@@@@@@@(                             @@@@& ",
-            "                       &@     /&@@@@@@@%%                                 &@@@@.",
-            "                       @@@@@@@@@%.                                      @@@@@*  ",
-            "                       (@@    &&@@@@@@                               &@@@@@@    ",
-            "                        @@@      &&@@@@@#                       .(@@@@@*%       ",
-            "                         /@@&        @@@@@@#             #%%@@@@@@(@            ",
-            "                            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    ",
-        };
-        String[] logo2 =
-        {
-            "                              /@@@@@/@@@@@@@@@@@@@@@%                           ",
-            "                           %@@&@/      (@@@@@@@@#@/@@#@@@@@@@@&@(               ",
-            "                        #@@#        &@@@@@                    @@@@@@@@.         ",
-            "                       @@@      &@@@@@@                            @@@@@@@%     ",
-            "                       @@&@@@@@@@@@@*                                  @@@@@&   ",
-            "                       @@    #@@@@@%                                     (@@@@& ",
-            "                       %@@      &@@@@@@@@@%                                @@@@ ",
-            "                        @@@&        #@@@@@@@@@@@@@                       &@@@@, ",
-            "                          %@@@@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@          @@@@@%.   ",
-            "                                                            /@@@@%@@@@@@        ",
-            "",
-            "",
-            "",
-            "",
-            "                                          *@@&@@@@@@&.                          ",
-            "       .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@          @@@@@@                      ",
-            "      @@&        @@@@@@@@(@@@@@@.                      &@@@/                    ",
-            "     @@       @@@@@@@@@@@                               @@@@&                   ",
-            "     @@   (&@@@@@.                                     @@@@@@                   ",
-            "     @@@@@@@@@@@@@                                  .#@@@@@                     ",
-            "     %@@      #@@@@@&                            /@@@@@(                        ",
-            "      @@@@       (@@@@@,                   /%@@@@@&@                            ",
-            "        *@@@&(.     &@@@@@@@@#@,/@@#@@@@@@@@@@,                                 ",
-            "            @@@@@@&@@@@@@@@@@@@@@@,                                             ",
 
-        };
         protected override void BeforeRun()
         {
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
@@ -192,13 +138,6 @@ namespace flipflOS
                         TimeSpan runtime = DateTime.Now - start;
                         Console.WriteLine("running for: " + runtime.TotalSeconds + " seconds"); // gibt sekunden seit systemstart aus
                         break;
- /*                 case "write":
-                        writeToMemory(args);
-                        break;
-                    case "read":
-                        Console.WriteLine(readFromMemory(args));
-                        break; 
- */
                     case "cd":
                         changeDirIterative(args);
                         break;
@@ -512,13 +451,13 @@ namespace flipflOS
         }
         public void drawLogo(int X, int Y, int type)
         {
-            for (int i = 0; i < logo.Length; i++)
+            for (int i = 0; i < AsciiArt.logo.Length; i++)
             {
                 Console.SetCursorPosition(X, Y);
                 if(type == 0)
                 {
-                    Console.Write(logo[i]);
-                }else Console.Write(logo2[i]);
+                    Console.Write(AsciiArt.logo[i]);
+                }else Console.Write(AsciiArt.logo2[i]);
                 Y++;
             }
         }

@@ -17,12 +17,7 @@ namespace flipflOS
         bool lastkeyarrow = false;
         bool saved = true;
         bool confirmedescape = false;
-        String[] settings =
-        {
-            "--------------------------------------------------------------------------------",
-            "-| esc to leave | tab to save |  -FlipFlOS-  File Editor | Author: P. Stephan |-",
-            "--------------------------------------------------------------------------------",
-        };
+
         public Directory.File startFileeditor(Directory.File file)
         {
             editingFile = file; //objektvariable wird gesetzt
@@ -178,7 +173,7 @@ namespace flipflOS
             for (int i = 21; i < 24; i++)
             {
                 Console.SetCursorPosition(0, i);
-                Console.Write(settings[i - 21]);
+                Console.Write(AsciiArt.fileEditorSettings[i - 21]);
             }
             Console.ResetColor();
         }

@@ -12,8 +12,6 @@ namespace flipflOS
         {
             new Command("time", "time", "for getting current runtime"),
             new Command("help", "help", "for getting help :D"),
-            new Command("write", "write [index] [byte]", "Writing data"),
-            new Command("read", "read [index]", "reading data"),
             new Command("cd", "cd [directory]", "changes directory to chosen directory. `cd ..` for parent"),
             new Command("gcd", "gcd", "prints current path of directory"),
             new Command("ls", "ls", "prints list of all elements in current directory"),

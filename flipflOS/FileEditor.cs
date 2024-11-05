@@ -33,9 +33,13 @@ namespace flipflOS
         public void beforeRun()
         {
             Console.Clear();
-            Console.WriteLine("starting Fileeditor");
-            Sleep(1000);
-            Inhalt = StringArrayToChar2D(editingFile.content); //konvertiert inhalt der File in das 2d char array
+            Console.Write("starting Fileeditor");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.Write(".");
+                Sleep(333);
+            }
+            Inhalt = StringArrayToChar2D(editingFile.content); //konvertiert inhalt der File in die char Matrix
             Sleep(1000);
             Console.Clear();
         }
@@ -64,15 +68,16 @@ namespace flipflOS
                         break;
 
                     case ConsoleKey.Backspace: // delete character and move cursor left
-                        if (cursorX > 0) // Ensure cursor is not at the start
-                        {
-                            cursorX--;
-                            writeInhalt(cursorY, cursorX, ' '); // Replace with space
-                        }
-                        printLine(cursorY, cursorX);
-                        saved = false;
-                        if (confirmedescape) confirmedescape = false;
-                        notifyclear();
+                            if (cursorX > 0) // Ensure cursor is not at the start
+                            {
+                                cursorX--;
+                                writeInhalt(cursorY, cursorX, ' '); // Replace with space
+                                editDisplayedChar(cursorY, cursorX);
+
+                            }
+                            saved = false;
+                            if (confirmedescape) confirmedescape = false;
+                            notifyclear();
                         break;
 
                     case ConsoleKey.UpArrow: // Move cursor up
@@ -94,9 +99,11 @@ namespace flipflOS
                         if (cursorX > 0) cursorX--;
                         lastkeyarrow = true;
                         break;
+
                     case ConsoleKey.Tab: //saves file
                         saveChanges();
                         break;
+
                     case ConsoleKey.Escape: // Exit
                         if (saved || confirmedescape)
                         {
@@ -108,19 +115,21 @@ namespace flipflOS
                             confirmedescape = true;
                         }
                         break;
+
                     default:
-                        if (!char.IsControl(key.KeyChar)) // Only write non-control characters
-                        {
-                            writeInhalt(cursorY, cursorX, key.KeyChar);
+                            if (!char.IsControl(key.KeyChar)) // Only write non-control characters
+                            {
+                                writeInhalt(cursorY, cursorX, key.KeyChar);
+                                editDisplayedChar(cursorY, cursorX);
+
                             if (cursorX < 79) cursorX++; // Move cursor right after writing
-                        }
-                        printLine(cursorY, cursorX);
+                            }
 
-                        if (confirmedescape) confirmedescape = false;
-                        lastkeyarrow = false;
-                        saved = false;
+                            if (confirmedescape) confirmedescape = false;
+                            lastkeyarrow = false;
+                            saved = false;
 
-                        notifyclear();
+                            notifyclear();
                         break;
                 }
             }
@@ -146,11 +155,7 @@ namespace flipflOS
             int X = cursorX;
             int Y = cursorY; //speichert vorherige cursor pos
             Console.SetCursorPosition(0, 20); //setzt in zeile
-
-            for(int i = 0; i < 8; i++)
-            {
-                Console.Write("          ");
-            }
+            Console.Write("                                                                                "); //cleared Zeile
             Console.SetCursorPosition(X, Y); //Setzt pos des cursors zurück
         }
         public void saveChanges()
@@ -177,10 +182,12 @@ namespace flipflOS
             }
             Console.ResetColor();
         }
-        public void printLine(int line, int posX)
+        public void editDisplayedChar(int line, int posX)
         {
-            for(int i = 0;i < Inhalt[line].Length; i++)
+            for(int i = posX-1;i < posX+1; i++)
             {
+                if (posX == 0) i++;
+                if (posX == 80) break;
                 Console.SetCursorPosition(i, line);
                 Console.Write(Inhalt[line][i]);
             }

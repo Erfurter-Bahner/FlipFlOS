@@ -295,7 +295,7 @@ namespace flipflOS
         }
         public void copyFile(String[] args)
         {
-            if (args.Length <= 3)
+            if (args.Length < 3)
             {
                 Console.WriteLine("Not enough arguments.");
                 return;

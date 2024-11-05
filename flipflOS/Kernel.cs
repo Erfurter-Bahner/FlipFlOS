@@ -482,38 +482,48 @@ namespace flipflOS
         public void loadingScreen(int seconds)
         {
             Console.Clear();
-            while(seconds > 8)
-            {
-                loadingScreen(8);
-                seconds -= 8;
-            }
-            double startingTime = 0;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            if (seconds > 8) seconds = 8;
+            int startingTime = 0;
             int spinnerIndex = 0;
 
-            while (startingTime < seconds)
+            while (startingTime < 3) //3 seconds the logo
             {
                 Console.Clear();
                 drawLogo(0, 0, spinnerIndex%2);
-
-                Sleep(5);
+                Sleep(1000);
                 // Increment the time counter
-                startingTime += 0.1 * 10;
+                startingTime++;
                 spinnerIndex++;
             }
             Console.Clear();
-            ClearCurrentLine();
+            drawLogo(0, 0, 2);
+            Sleep((seconds - 3)*1000);
+            Console.Clear();
+            Console.ResetColor();
         }
         public void drawLogo(int X, int Y, int type)
         {
             for (int i = 0; i < AsciiArt.logo.Length; i++)
             {
                 Console.SetCursorPosition(X, Y);
-                if(type == 0)
+                switch (type)
                 {
-                    Console.Write(AsciiArt.logo[i]);
-                }else Console.Write(AsciiArt.logo2[i]);
+                    case 0:
+                        Console.Write(AsciiArt.logo[i]);
+                        break;
+                    case 1:
+                        Console.Write(AsciiArt.logo2[i]);
+                        break;
+                    case 2:
+                        Console.Write(AsciiArt.logo3[i]);
+                        break;
+                    default:
+                        break;
+                }
                 Y++;
             }
+
         }
         public void Sleep(int milliseconds)
         {

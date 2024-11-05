@@ -261,6 +261,11 @@ namespace flipflOS
         }
         public void copyFile(String[] args)
         {
+            if (args.Length <= 3)
+            {
+                Console.WriteLine("Not enough arguments.");
+                return;
+            }
             String path = args[1];        //nimmt die argumente
             String destination = args[2];
 
@@ -362,11 +367,29 @@ namespace flipflOS
         }
         public void editFile(String[] args)
         {
-            if (args.Length <= 1 || currentdir.getFile(args[1]) == null) return;
-            Directory.File file = currentdir.getFile(args[1]); // am ende bitte mit directory verschiebung !!!
+            if (args.Length <= 1) return;
+
+            String path = args[1];        //nimmt die argumente
+
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
+            }
+            Directory.File file = currentdir.getFile(fileString); // am ende bitte mit directory verschiebung !!!
             Directory.File newfile = new FileEditor().startFileeditor(file);
             currentdir.deleteFile(file.name);
             currentdir.addFile(newfile);
+
+            currentdir = startingdir; // zurück zum ersten Directory
         }
         public string AddSeparator(string input)
         {

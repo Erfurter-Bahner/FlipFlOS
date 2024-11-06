@@ -142,7 +142,7 @@ namespace flipflOS
             int X = cursorX;
             int Y = cursorY; //speichert vorherige cursor pos
             Console.SetCursorPosition(0, 20); //setzt in zeile
-            Console.Write("                                                                                "); //cleared Zeile
+            Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(X, Y); //Setzt pos des cursors zurück
         }
         public void saveChanges()

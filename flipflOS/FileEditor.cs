@@ -41,7 +41,7 @@ namespace flipflOS
         public void run()
         {
             bool running = true;
-            printFile(); // soll einmal printen, dann nurnoch die zeile ändern
+            printFile(true); // soll einmal printen, dann nurnoch die zeile ändern
             while (running)
             {
                 Console.SetCursorPosition(cursorX, cursorY);
@@ -159,7 +159,7 @@ namespace flipflOS
             notify("saved changes");
             saved = true;
         }
-        public void printFile()
+        public void printFile(bool editor)
         {
             Console.Clear();
             foreach (char[] line in Inhalt)
@@ -173,7 +173,10 @@ namespace flipflOS
             for (int i = 21; i < 24; i++)
             {
                 Console.SetCursorPosition(0, i);
-                Console.Write(AsciiArt.fileEditorSettings[i - 21]);
+                if (editor)
+                {
+                    Console.Write(AsciiArt.fileEditorSettings[i - 21]);
+                }else Console.Write(AsciiArt.readerSettings[i - 21]);
             }
             Console.ResetColor();
         }
@@ -253,6 +256,30 @@ namespace flipflOS
             }
 
             return charArray;
+        }
+        public void readFile(Directory.File file)
+        {
+            if (file == null || file.content == null || file.content.Length == 0) return;
+            editingFile = file;
+            this.Inhalt = StringArrayToChar2D(editingFile.content); //konvertiert inhalt der File in die char Matrix
+            printFile(false); //schreibt Datei
+            Console.SetCursorPosition(0, 0);
+
+            bool running = true;
+            while (running) //Laufzeit-Loop
+            {
+                var key = Console.ReadKey(intercept: true);
+                if (key.Key == ConsoleKey.Escape) //Escape beendet die Schleife
+                {
+                    running = false;
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, 0);
+                }
+            }
+
+            Console.Clear(); //bei Beendingung noch das Terminal leeren.
         }
         public static void Sleep(int milliseconds)
         {

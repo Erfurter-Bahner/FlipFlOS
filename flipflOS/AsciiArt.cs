@@ -92,9 +92,15 @@ namespace flipflOS
 
         };
         public static String[] fileEditorSettings =
-{
+        {
             "--------------------------------------------------------------------------------",
             "-| esc to leave | tab to save |  -FlipFlOS-  File Editor | Author: P. Stephan |-",
+            "--------------------------------------------------------------------------------",
+        };
+        public static String[] readerSettings =
+{
+            "--------------------------------------------------------------------------------",
+            "-| esc to leave |        -FlipFlOS-         File Editor  | Author: P. Stephan |-",
             "--------------------------------------------------------------------------------",
         };
     }

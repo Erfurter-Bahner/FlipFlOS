@@ -154,7 +154,10 @@ namespace flipflOS
                         makeFile(args);
                         break;
                     case "readFile":
-                        editFile(args);
+                        read(args);
+                        break;
+                    case "read":
+                        read(args);
                         break;
                     case "removeFile":
                         removeFile(args);
@@ -197,12 +200,6 @@ namespace flipflOS
 
         public void help(String[] args)
         {
-            if (args.Length > 1)
-            {
-                Console.WriteLine("need help with: " + args[1]);
-            }
-            else
-            {
                 //schleife durch array aller commands, mit angabe der usage und info, und verwendung von Farbe
                 for (int i = 0; i < CommandManager.commands.Length; i++)
                 {
@@ -212,29 +209,6 @@ namespace flipflOS
                     Console.ResetColor(); //weiß für die beschreibung
                     Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
-            }
-        }
-        public void writeToMemory(String[] args)
-        {
-            if (args.Length <= 2)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: write index data");
-                return;
-            }
-            uint index = Convert.ToUInt32(args[1]) * 2;
-            byte data = Convert.ToByte(args[2]);
-            mem.writeAt(index, data);
-        }
-        public ushort readFromMemory(String[] args)
-        {
-            if (args.Length <= 1)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: read index");
-                return 0;
-            }
-            ushort index = Convert.ToUInt16(args[1]);
-
-            return mem.readAt(index);
         }
         public void makeDirectory(String[] args)
         {
@@ -254,12 +228,16 @@ namespace flipflOS
             }
 
             String path = args[1];        //nimmt die argumente
-
             Directory startingdir = currentdir; //speichert ursprüngliches directory
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
 
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
             String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
 
+            if (seperatedbyslash.Length == 0 || fileString == "")
+            {
+                Console.WriteLine("No name given");
+                return;
+            }
             for (int i = 0; i < seperatedbyslash.Length - 1; i++)
             {
                 changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
@@ -409,6 +387,29 @@ namespace flipflOS
 
             currentdir = startingdir; // zurück zum ersten Directory
         }
+        public void read(String[] args)
+        {
+            if (args.Length <= 1) return;
+            String path = args[1];        //nimmt die argumente
+
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+            
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
+            }
+
+            new FileEditor().readFile(currentdir.getFile(fileString));
+
+            currentdir = startingdir; // zurück zum ersten Directory
+        }
         public void rename(String[] args)
         {
             if (args.Length < 3)
@@ -458,7 +459,7 @@ namespace flipflOS
                 }
             }
             Console.ForegroundColor = ConsoleColor.Black;
-
+            ClearCurrentLine();
         }
         public void loadingScreen(int seconds)
         {

@@ -13,7 +13,7 @@ namespace flipflOS
     public class Serializer
     {
 
-        public void saveFile(String filePath, String content)
+        public static void saveFile(String filePath, String content)
         {
             try
             {
@@ -42,12 +42,12 @@ namespace flipflOS
                 return "";
             }
         }
-        public void createDirectoryFromFilepath(string filePath)
+        public static void createDirectoryFromFilepath(string filePath)
         {
            string directoryPath = RemoveLastDirectory(filePath);
            createDirectory(directoryPath);
         }
-        public void createDirectory(string directoryPath)
+        public static void createDirectory(string directoryPath)
         {
             try
             {
@@ -77,5 +77,64 @@ namespace flipflOS
             // Return the substring before the last backslash
             return filePath.Substring(0, lastBackslashIndex);
         }
+        public static Directory createRoot()
+        {
+            Directory root = new Directory(null, null, "root");
+            string rootDir = @"0:\";  // Starting directory
+            try
+            {
+                // Call the function to list subdirectories
+                String[] subdirectories = GetSubdirectories(rootDir);
+
+                //Console.WriteLine("Subdirectories in " + rootDir + ":");
+                foreach (String subdir in subdirectories)
+                {
+                    root.createSubDirectory(subdir);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }
+            return root;
+        }
+        public static string[] GetSubdirectories(string path)
+        {
+            try
+            {
+                if (System.IO.Directory.Exists(path))
+                {
+                    String subdirs = "";
+                    //   var entries = System.IO.Directory.GetFileSystemEntries(path);
+                    String[] entries = { "home","directory"};
+                    if (entries.Length == 0)
+                    {
+                        Console.WriteLine("Verzeichnis ist leer.");
+                        return null;
+                    }
+                    else
+                    {
+                        foreach (var entry in entries)
+                        {
+                            subdirs += "%" + entry;
+                        }
+                        String[] subdirectories = subdirs.Split("%");
+                        return subdirectories;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Verzeichnis '{path}' existiert nicht.");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fehler beim Auflisten des Verzeichnisses: {ex.Message}");
+                return null;
+            }
+        }
+
+
     }
 }

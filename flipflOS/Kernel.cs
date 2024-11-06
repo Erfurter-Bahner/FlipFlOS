@@ -9,12 +9,15 @@ namespace flipflOS
 {
     public class Kernel : Sys.Kernel
     {
+        private Sys.FileSystem.CosmosVFS fs1;
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
 
         protected override void BeforeRun()
         {
+            fs1 = new Sys.FileSystem.CosmosVFS();
+            Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs1);
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
             Console.Clear();
             loadingScreen(5);
@@ -218,6 +221,10 @@ namespace flipflOS
                     return;
                 }
             currentdir.createSubDirectory(args[1]);
+            if(currentdir.name == "root")
+            {
+                Serializer.createDirectory(args[1]);
+            }
         }
         public void makeFile(String[] args)
         {
@@ -307,10 +314,7 @@ namespace flipflOS
         }
         public void createRoot()
         { //erstellt alle nötigen verzeichnisse für das dateisystem
-            currentdir = new Directory(null, null, "root");
-            currentdir.createSubDirectory("home");
-            currentdir.createSubDirectory("users");
-            currentdir.createSubDirectory("var");
+            currentdir = Serializer.createRoot();
         }
         public static void ClearCurrentLine()
         { //stellt sicher, dass während der navigation mit pfeiltasten keine neue Zeile begonnen wird.

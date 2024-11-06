@@ -14,7 +14,6 @@ namespace flipflOS
         int cursorY = 0;
         Char[][] Inhalt;
 
-        bool lastkeyarrow = false;
         bool saved = true;
         bool confirmedescape = false;
 
@@ -51,7 +50,6 @@ namespace flipflOS
                         {
                             cursorY = 0;
                         }
-                        lastkeyarrow = true;
                         break;
 
                     case ConsoleKey.Backspace: // delete character and move cursor left
@@ -69,22 +67,18 @@ namespace flipflOS
 
                     case ConsoleKey.UpArrow: // Move cursor up
                         if (cursorY > 0) cursorY--;
-                        lastkeyarrow = true;
                         break;
 
                     case ConsoleKey.DownArrow: // Move cursor down
                         if (cursorY < Inhalt.Length - 1) cursorY++;
-                        lastkeyarrow = true;
                         break;
 
                     case ConsoleKey.RightArrow: // Move cursor right
                         if (cursorX < 79) cursorX++;
-                        lastkeyarrow = true;
                         break;
 
                     case ConsoleKey.LeftArrow: // Move cursor left
                         if (cursorX > 0) cursorX--;
-                        lastkeyarrow = true;
                         break;
 
                     case ConsoleKey.Tab: //saves file
@@ -113,7 +107,6 @@ namespace flipflOS
                             }
 
                             if (confirmedescape) confirmedescape = false;
-                            lastkeyarrow = false;
                             saved = false;
 
                             notifyclear();

@@ -380,6 +380,10 @@ namespace flipflOS
             {
                 return;
             }
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            drawLogo(0, 0, AsciiArt.Fileeditor);
+            Console.ResetColor();
+            Sleep(2000);
             Directory.File file = currentdir.getFile(fileString);
             Directory.File newfile = new FileEditor().startFileeditor(file);
             currentdir.deleteFile(file.name);
@@ -471,38 +475,25 @@ namespace flipflOS
 
             while (startingTime < 3) //3 seconds the logo
             {
-                Console.Clear();
-                drawLogo(0, 0, spinnerIndex%2);
+                if(spinnerIndex%2 == 0) drawLogo(0, 0, AsciiArt.logo);
+                else                  drawLogo(0, 0, AsciiArt.logo2);
                 Sleep(1000);
                 // Increment the time counter
                 startingTime++;
                 spinnerIndex++;
             }
-            Console.Clear();
-            drawLogo(0, 0, 2);
+            drawLogo(0, 0, AsciiArt.logo3);
             Sleep((seconds - 3)*1000);
             Console.Clear();
             Console.ResetColor();
         }
-        public void drawLogo(int X, int Y, int type)
+        public void drawLogo(int X, int Y, String[] logo)
         {
+            Console.Clear();
             for (int i = 0; i < AsciiArt.logo.Length; i++)
             {
                 Console.SetCursorPosition(X, Y);
-                switch (type)
-                {
-                    case 0:
-                        Console.Write(AsciiArt.logo[i]);
-                        break;
-                    case 1:
-                        Console.Write(AsciiArt.logo2[i]);
-                        break;
-                    case 2:
-                        Console.Write(AsciiArt.logo3[i]);
-                        break;
-                    default:
-                        break;
-                }
+                    Console.Write(logo[i]);
                 Y++;
             }
 

@@ -28,15 +28,7 @@ namespace flipflOS
         public void beforeRun()
         {
             Console.Clear();
-            Console.Write("starting Fileeditor");
-            for (int i = 0; i < 3; i++)
-            {
-                Console.Write(".");
-                Sleep(333);
-            }
             Inhalt = StringArrayToChar2D(editingFile.content); //konvertiert inhalt der File in die char Matrix
-            Sleep(1000);
-            Console.Clear();
         }
         public void run()
         {

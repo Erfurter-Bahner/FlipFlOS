@@ -12,61 +12,7 @@ namespace flipflOS
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
-        String[] logo =
-        {
-            "       ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                                          ",
-            "    @@@@%       &@@@@&@&          *@@@@@@@@@@@.                                 ",
-            "   @@@      .&@@@@@@                       @@@@@@@@                             ",
-            "  @@@    .@@@@@@#                              @@@@@@@,                         ",
-            "  @@@@@@@@@(@                                      &@@@@@                       ",
-            "  @@     @@@@@@@@%@                                  @@@@@                      ",
-            "   @*       %@@@@@@@@@%                              @@@@#                      ",
-            "    @@@@          @@@@@@@@@@@@@@@@                 #@@@@@                       ",
-            "      @@@@@@@@@@@@@@@(      *@@@@@@@@@@@@@@@@@@#@@@@@@                          ",
-            "                                                                                ",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "                           *@@@@@@#@@(@@@*         @@@@@@@@@@@@@@@@@@@@@@@      ",
-            "                         %@@&@        @@@@@@@@@@@@@@@@&@.               @@@@@@  ",
-            "                        @@,       (@@@@@@@@@(                             @@@@& ",
-            "                       &@     /&@@@@@@@%%                                 &@@@@.",
-            "                       @@@@@@@@@%.                                      @@@@@*  ",
-            "                       (@@    &&@@@@@@                               &@@@@@@    ",
-            "                        @@@      &&@@@@@#                       .(@@@@@*%       ",
-            "                         /@@&        @@@@@@#             #%%@@@@@@(@            ",
-            "                            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    ",
-        };
-        String[] logo2 =
-        {
-            "                              /@@@@@/@@@@@@@@@@@@@@@%                           ",
-            "                           %@@&@/      (@@@@@@@@#@/@@#@@@@@@@@&@(               ",
-            "                        #@@#        &@@@@@                    @@@@@@@@.         ",
-            "                       @@@      &@@@@@@                            @@@@@@@%     ",
-            "                       @@&@@@@@@@@@@*                                  @@@@@&   ",
-            "                       @@    #@@@@@%                                     (@@@@& ",
-            "                       %@@      &@@@@@@@@@%                                @@@@ ",
-            "                        @@@&        #@@@@@@@@@@@@@                       &@@@@, ",
-            "                          %@@@@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@          @@@@@%.   ",
-            "                                                            /@@@@%@@@@@@        ",
-            "",
-            "",
-            "",
-            "",
-            "                                          *@@&@@@@@@&.                          ",
-            "       .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@          @@@@@@                      ",
-            "      @@&        @@@@@@@@(@@@@@@.                      &@@@/                    ",
-            "     @@       @@@@@@@@@@@                               @@@@&                   ",
-            "     @@   (&@@@@@.                                     @@@@@@                   ",
-            "     @@@@@@@@@@@@@                                  .#@@@@@                     ",
-            "     %@@      #@@@@@&                            /@@@@@(                        ",
-            "      @@@@       (@@@@@,                   /%@@@@@&@                            ",
-            "        *@@@&(.     &@@@@@@@@#@,/@@#@@@@@@@@@@,                                 ",
-            "            @@@@@@&@@@@@@@@@@@@@@@,                                             ",
 
-        };
         protected override void BeforeRun()
         {
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
@@ -151,7 +97,15 @@ namespace flipflOS
                                 Console.ResetColor();
                             }
                             break;
-
+                        case ConsoleKey.Tab:
+                            string autoCompletePart = HandleTabCompletion(currentInput);
+                            if (!string.IsNullOrEmpty(autoCompletePart))
+                            {
+                                // Vervollständigen und auf der Konsole anzeigen
+                                Console.Write(autoCompletePart);
+                                currentInput += autoCompletePart; // Update userInput mit dem vervollständigten Teil
+                            }
+                            break;
                         default:
                             currentInput += key.KeyChar;
                             Console.Write(key.KeyChar);
@@ -200,7 +154,10 @@ namespace flipflOS
                         makeFile(args);
                         break;
                     case "readFile":
-                        editFile(args);
+                        read(args);
+                        break;
+                    case "read":
+                        read(args);
                         break;
                     case "removeFile":
                         removeFile(args);
@@ -213,6 +170,9 @@ namespace flipflOS
                         break;
                     case "edit":
                         editFile(args);
+                        break;
+                    case "rename":
+                        rename(args);
                         break;
                     case "clear":
                         Console.Clear();
@@ -240,12 +200,6 @@ namespace flipflOS
 
         public void help(String[] args)
         {
-            if (args.Length > 1)
-            {
-                Console.WriteLine("need help with: " + args[1]);
-            }
-            else
-            {
                 //schleife durch array aller commands, mit angabe der usage und info, und verwendung von Farbe
                 for (int i = 0; i < CommandManager.commands.Length; i++)
                 {
@@ -255,29 +209,6 @@ namespace flipflOS
                     Console.ResetColor(); //weiß für die beschreibung
                     Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
-            }
-        }
-        public void writeToMemory(String[] args)
-        {
-            if (args.Length <= 2)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: write index data");
-                return;
-            }
-            uint index = Convert.ToUInt32(args[1]) * 2;
-            byte data = Convert.ToByte(args[2]);
-            mem.writeAt(index, data);
-        }
-        public ushort readFromMemory(String[] args)
-        {
-            if (args.Length <= 1)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: read index");
-                return 0;
-            }
-            ushort index = Convert.ToUInt16(args[1]);
-
-            return mem.readAt(index);
         }
         public void makeDirectory(String[] args)
         {
@@ -295,7 +226,24 @@ namespace flipflOS
                 Console.WriteLine("Not enough Arguments. Syntax: touch file");
                 return;
             }
-            currentdir.createFile(args[1]);
+
+            String path = args[1];        //nimmt die argumente
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            if (seperatedbyslash.Length == 0 || fileString == "")
+            {
+                Console.WriteLine("No name given");
+                return;
+            }
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            currentdir.createFile(fileString);
+            currentdir = startingdir;
         }
         public void removeFile(String[] args)
         {
@@ -325,6 +273,11 @@ namespace flipflOS
         }
         public void copyFile(String[] args)
         {
+            if (args.Length < 3)
+            {
+                Console.WriteLine("Not enough arguments.");
+                return;
+            }
             String path = args[1];        //nimmt die argumente
             String destination = args[2];
 
@@ -408,62 +361,85 @@ namespace flipflOS
         {
             Console.WriteLine("  "+currentdir.name);
         }
-        public void writeToFile(String[] args)
-        {
-            if (args.Length == 1) return;
-            String content = "";
-
-            for (int i = 2; i < args.Length; i++) //nimmt alle argumente nach "writeFile [file]" und schreibt sie in die datei hinein.
-            {
-                String argument = args[i];
-                content += argument+" ";
-            }
-            //now content has the whole line
-            content = AddSeparator(content);
-            String[] splitbynewlines = content.Split('/');
-
-            currentdir.getFile(args[1]).changecontent(splitbynewlines);
-        }
         public void editFile(String[] args)
         {
-            if (args.Length <= 1 || currentdir.getFile(args[1]) == null) return;
-            Directory.File file = currentdir.getFile(args[1]); // am ende bitte mit directory verschiebung !!!
+            if (args.Length <= 1) return;
+
+            String path = args[1];        //nimmt die argumente
+
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
+            }
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            drawLogo(0, 0, AsciiArt.Fileeditor);
+            Console.ResetColor();
+            Sleep(2000);
+            Directory.File file = currentdir.getFile(fileString);
             Directory.File newfile = new FileEditor().startFileeditor(file);
             currentdir.deleteFile(file.name);
             currentdir.addFile(newfile);
+
+            currentdir = startingdir; // zurück zum ersten Directory
         }
-        public string AddSeparator(string input)
+        public void read(String[] args)
         {
-            StringBuilder result = new StringBuilder();
-            int countSinceLastSlash = 0; // Track the number of characters since the last "/"
+            if (args.Length <= 1) return;
+            String path = args[1];        //nimmt die argumente
 
-            for (int i = 0; i < input.Length; i++)
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+            
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
             {
-                // Add current character to result
-                result.Append(input[i]);
-
-                // Increase the counter if the character is not '/'
-                if (input[i] != '/')
-                {
-                    countSinceLastSlash++;
-                }
-                else
-                {
-                    // Reset the counter when a '/' is encountered
-                    countSinceLastSlash = 0;
-                }
-
-                // If we've reached 50 characters without a '/', add "-/"
-                if (countSinceLastSlash == 50)
-                {
-                    result.Append("-/");
-                    countSinceLastSlash = 0; // Reset the counter after adding "-/"
-                }
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
             }
 
-            return result.ToString();
-        }
+            new FileEditor().readFile(currentdir.getFile(fileString));
 
+            currentdir = startingdir; // zurück zum ersten Directory
+        }
+        public void rename(String[] args)
+        {
+            if (args.Length < 3)
+            {
+                Console.WriteLine("Not enough Arguments. Syntax: rename [file] [newname]");
+                return;
+            }
+            String path = args[1];        //nimmt die argumente
+
+            Directory startingdir = currentdir; //speichert ursprüngliches directory
+            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
+
+            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
+
+            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
+            {
+                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
+            }
+            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
+            {
+                return;
+            }
+            Directory.File file = currentdir.getFile(fileString);
+            file.name = args[2];
+            currentdir = startingdir;
+        }
         public void printAllFilesAndDirs()
         {
 
@@ -487,43 +463,40 @@ namespace flipflOS
                 }
             }
             Console.ForegroundColor = ConsoleColor.Black;
-
+            ClearCurrentLine();
         }
         public void loadingScreen(int seconds)
         {
             Console.Clear();
-            while(seconds > 8)
-            {
-                loadingScreen(8);
-                seconds -= 8;
-            }
-            double startingTime = 0;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            if (seconds > 8) seconds = 8;
+            int startingTime = 0;
             int spinnerIndex = 0;
 
-            while (startingTime < seconds)
+            while (startingTime < 3) //3 seconds the logo
             {
-                Console.Clear();
-                drawLogo(0, 0, spinnerIndex%2);
-
-                Sleep(5);
+                if(spinnerIndex%2 == 0) drawLogo(0, 0, AsciiArt.logo);
+                else                  drawLogo(0, 0, AsciiArt.logo2);
+                Sleep(1000);
                 // Increment the time counter
-                startingTime += 0.1 * 10;
+                startingTime++;
                 spinnerIndex++;
             }
+            drawLogo(0, 0, AsciiArt.logo3);
+            Sleep((seconds - 3)*1000);
             Console.Clear();
-            ClearCurrentLine();
+            Console.ResetColor();
         }
-        public void drawLogo(int X, int Y, int type)
+        public void drawLogo(int X, int Y, String[] logo)
         {
-            for (int i = 0; i < logo.Length; i++)
+            Console.Clear();
+            for (int i = 0; i < AsciiArt.logo.Length; i++)
             {
                 Console.SetCursorPosition(X, Y);
-                if(type == 0)
-                {
                     Console.Write(logo[i]);
-                }else Console.Write(logo2[i]);
                 Y++;
             }
+
         }
         public void Sleep(int milliseconds)
         {

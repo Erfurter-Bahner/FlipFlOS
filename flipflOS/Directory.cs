@@ -26,6 +26,11 @@ namespace flipflOS
                     Console.WriteLine("Directory already exists.");
                     return;
                 }
+                if (!IsValidString(name))
+                {
+                    Console.WriteLine("invalid name!");
+                    return;
+                }
                 newSubDirectories[i] = subdirectories[i];
             }
             newSubDirectories[newSubDirectories.Length - 1] = new Directory(null, this, name);
@@ -34,11 +39,15 @@ namespace flipflOS
         public void createFile(string name)
         {
             // Check if files is null and initialize it if necessary
+            if (!IsValidString(name))
+            {
+                Console.WriteLine("invalid name!");
+                return;
+            }
             if (files == null)
             {
                 files = new File[0]; // Initialize to an empty array if null
             }
-
             File[] newFiles = new File[files.Length + 1];
             // Copy existing files to the new array
             for (int i = 0; i < files.Length; i++)
@@ -54,6 +63,33 @@ namespace flipflOS
             // Add the new file to the last position
             newFiles[newFiles.Length - 1] = new File(name, new string[]{});
             files = newFiles;
+        }
+        public static bool IsValidString(string input)
+        {
+            Char[] inputarray = input.ToCharArray();
+            foreach(char c in inputarray)
+            {
+                if (isFaultyCharacter(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static char[] acceptedCharacters = new char[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '.', '_', '-', '+', '!', '?', '(', ')'
+        };
+        public static bool isFaultyCharacter(char character)
+        {
+            foreach(char c in acceptedCharacters)
+            {
+                if(c == character) return false;
+            }
+            return true;
         }
         public String getPath()
         {

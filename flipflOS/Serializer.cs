@@ -56,7 +56,9 @@ namespace flipflOS
         {
             try
             {
-                String filePath = @"0:\" + generateDirectoryPath(dir) + @"\" + filename;
+                String filePath = generateDirectoryPath(dir);
+                if (filePath == @"0:\") filePath += filename;
+                else filePath += @"\" + filename;
 
                 if (File.Exists(filePath))
                 {

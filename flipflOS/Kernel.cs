@@ -280,7 +280,7 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //geht zum Pfad wo die Datei ist
             }
-            currentdir.deleteFile(file); //löscht File
+            if(Serializer.deleteFile(currentdir, file)) currentdir.deleteFile(file); //löscht File
             currentdir = startingdir; //geht wieder zum Startverzeichnis
         }
         public void moveFile(String[] args)

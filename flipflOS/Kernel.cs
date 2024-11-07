@@ -204,6 +204,9 @@ namespace flipflOS
                     case "colorchange":
                             changeFormat();
                         break;
+                    case "mouse":
+                            new Painter().startPainter();
+                        break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;

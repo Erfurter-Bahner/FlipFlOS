@@ -40,12 +40,20 @@ namespace flipflOS
                 // Detect mouse movement
                 if (mouseX != lastMouseX || mouseY != lastMouseY)
                 {
-                    System.Console.Clear();
-                    System.Console.WriteLine($"Mouse moved to: X = {mouseX}, Y = {mouseY}");
+                    if (MouseManager.LastMouseState != MouseState.Left)
+                    {
+                        System.Console.Clear();
+                        System.Console.WriteLine($"Mouse moved to: X = {mouseX}, Y = {mouseY}");
+
+                    }
+                    if (MouseManager.LastMouseState == MouseState.Right)
+                    {
+                        break;
+                    }
 
                     System.Console.SetCursorPosition( mouseX/10, mouseY/10 );
                     System.Console.Write("0");
-
+ 
                     lastMouseX = mouseX;
                     lastMouseY = mouseY;
                 }

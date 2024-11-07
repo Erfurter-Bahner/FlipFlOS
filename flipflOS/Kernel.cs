@@ -4,12 +4,13 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
+using Cosmos.System.FileSystem.VFS;
 
 namespace flipflOS
 {
     public class Kernel : Sys.Kernel
     {
-        private Sys.FileSystem.CosmosVFS fs1;
+        public static Sys.FileSystem.CosmosVFS fs1;
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
@@ -18,6 +19,7 @@ namespace flipflOS
         {
             fs1 = new Sys.FileSystem.CosmosVFS();
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs1);
+
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
             Console.Clear();
             loadingScreen(5);
@@ -153,6 +155,9 @@ namespace flipflOS
                     case "mkdir":
                         makeDirectory(args);
                         break;
+                    case "removeDir":
+                        removeDirectory(args);
+                        break;
                     case "touch":
                         makeFile(args);
                         break;
@@ -221,10 +226,21 @@ namespace flipflOS
                     return;
                 }
             currentdir.createSubDirectory(args[1]);
-            if(currentdir.name == "root")
+
+            Serializer.createDirectory(currentdir,args[1]);
+        }
+        public void removeDirectory(String[] args)
+        {
+            if (args.Length <= 1)
             {
-                Serializer.createDirectory(args[1]);
+                Console.WriteLine("Not enough Arguments. Syntax: mkdir dir");
+                return;
             }
+            if (Serializer.deleteDirectory(currentdir, args[1]))
+            {
+                currentdir.removeSubDirectory(args[1]);
+            }
+
         }
         public void makeFile(String[] args)
         {
@@ -390,9 +406,9 @@ namespace flipflOS
             Sleep(2000);
             Directory.File file = currentdir.getFile(fileString);
             Directory.File newfile = new FileEditor().startFileeditor(file);
-            currentdir.deleteFile(file.name);
-            currentdir.addFile(newfile);
-
+            if(Serializer.deleteFile(currentdir,file.name)) currentdir.deleteFile(file.name);
+            if(Serializer.saveFile(currentdir,file.name,newfile.content)) currentdir.addFile(newfile);
+            
             currentdir = startingdir; // zurück zum ersten Directory
         }
         public void read(String[] args)

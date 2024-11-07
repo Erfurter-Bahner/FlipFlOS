@@ -36,6 +36,29 @@ namespace flipflOS
             newSubDirectories[newSubDirectories.Length - 1] = new Directory(null, this, name);
             subdirectories = newSubDirectories;
         }
+        public void removeSubDirectory(String name)
+        {
+            if (name == null) return;
+            for (int i = 0; i < subdirectories.Length; i++)
+            {
+                if (subdirectories[i].name == name)
+                { //if File has the same name delete it
+                    //go ahead and shorten the array by 1
+                    Directory[] newsub = new Directory[subdirectories.Length - 1];
+                    for (int j = 0; j < i; j++)
+                    {
+                        newsub[j] = subdirectories[j];
+                    }
+                    for (int j = i; j < subdirectories.Length - 1; j++)
+                    {
+                        newsub[j] = subdirectories[j + 1];
+                    }
+                    subdirectories = newsub;
+                    return;                 //beendet funktion wenn Datei gefunden wurde und gelöscht wurde.
+                }
+            }
+            Console.WriteLine("File does not exist");
+        }
         public void createFile(string name)
         {
             // Check if files is null and initialize it if necessary

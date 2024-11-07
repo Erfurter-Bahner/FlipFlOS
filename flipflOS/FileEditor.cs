@@ -127,7 +127,7 @@ namespace flipflOS
             Console.SetCursorPosition(0, 20); //setzt in zeile
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(msg); //schreibt
-            Console.ResetColor();
+            Kernel.ResetColor();
             Console.SetCursorPosition(X, Y); //Setzt pos des cursors zurück
         }
         public void notifyclear()
@@ -163,7 +163,7 @@ namespace flipflOS
                     Console.Write(AsciiArt.fileEditorSettings[i - 21]);
                 }else Console.Write(AsciiArt.readerSettings[i - 21]);
             }
-            Console.ResetColor();
+            Kernel.ResetColor();
         }
         public void editDisplayedChar(int line, int posX)
         {

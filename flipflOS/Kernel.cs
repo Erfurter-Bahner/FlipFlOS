@@ -5,6 +5,8 @@ using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
 using Cosmos.System.FileSystem.VFS;
+using System.Drawing;
+using Cosmos.HAL;
 
 namespace flipflOS
 {
@@ -15,6 +17,9 @@ namespace flipflOS
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
         public Directory currentdir;
 
+        public static ConsoleColor textColor = ConsoleColor.White;
+        public static ConsoleColor bgColor = ConsoleColor.Black;
+
         protected override void BeforeRun()
         {
             fs1 = new Sys.FileSystem.CosmosVFS();
@@ -22,11 +27,12 @@ namespace flipflOS
 
             createRoot(); //erstellt für DateiSystem das Root verzeichnis, sowie weitere
             Console.Clear();
-            loadingScreen(5);
+            loadingScreen(6);
             Console.Clear();
             Console.WriteLine("Willkommen im FlipFlOS- nutze help fuer Hilfe!");
             start = DateTime.Now;
            
+
         }
 
         protected override void Run()
@@ -39,7 +45,7 @@ namespace flipflOS
             {
                 Console.ForegroundColor = ConsoleColor.Green; //ändert Farbe zu Grün
                 Console.Write(currentdir.getPath() + " : ");
-                Console.ResetColor(); //textfarbe zurück zu schwarz
+                ResetColor(); //textfarbe zurück zu schwarz
 
                 currentInput = "";
 
@@ -64,7 +70,7 @@ namespace flipflOS
                                 ClearCurrentLine();
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write(currentdir.getPath());
-                                Console.ResetColor();
+                                ResetColor();
                                 Console.Write(" : " + currentInput);
                             }
                             break;
@@ -77,7 +83,7 @@ namespace flipflOS
                                 ClearCurrentLine();
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write(currentdir.getPath());
-                                Console.ResetColor();
+                                ResetColor();
                                 Console.Write(" : " + currentInput);
                             }
                             break;
@@ -90,7 +96,7 @@ namespace flipflOS
                                 ClearCurrentLine();
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write(currentdir.getPath());
-                                Console.ResetColor();
+                                ResetColor();
                                 Console.Write(" : " + currentInput);
                             }
                             else
@@ -99,7 +105,7 @@ namespace flipflOS
                                 ClearCurrentLine();
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.Write(currentdir.getPath() + " : ");
-                                Console.ResetColor();
+                                ResetColor();
                             }
                             break;
                         case ConsoleKey.Tab:
@@ -195,6 +201,9 @@ namespace flipflOS
                     case "commands+":
                             commandsFull();
                         break;
+                    case "colorchange":
+                            changeFormat();
+                        break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;
@@ -214,7 +223,7 @@ namespace flipflOS
                     Console.ForegroundColor = ConsoleColor.Magenta; //magenta für die usage
                     Console.WriteLine(CommandManager.commands[i].usage);
 
-                    Console.ResetColor(); //weiß für die beschreibung
+                    ResetColor(); //weiß für die beschreibung
                     Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
         }
@@ -402,7 +411,7 @@ namespace flipflOS
             }
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             drawLogo(0, 0, AsciiArt.Fileeditor);
-            Console.ResetColor();
+            ResetColor();
             Sleep(2000);
             Directory.File file = currentdir.getFile(fileString);
             Directory.File newfile = new FileEditor().startFileeditor(file);
@@ -482,7 +491,7 @@ namespace flipflOS
                     Console.WriteLine($"  {file.name}");
                 }
             }
-            Console.ForegroundColor = ConsoleColor.Black;
+            ResetColor();
             ClearCurrentLine();
         }
         public void loadingScreen(int seconds)
@@ -505,7 +514,7 @@ namespace flipflOS
             drawLogo(0, 0, AsciiArt.logo3);
             Sleep((seconds - 3)*1000);
             Console.Clear();
-            Console.ResetColor();
+            ResetColor();
         }
         public void drawLogo(int X, int Y, String[] logo)
         {
@@ -557,6 +566,27 @@ namespace flipflOS
             }
             // Gibt eine leere Zeichenfolge zurück, wenn keine Übereinstimmung gefunden wird
             return string.Empty;
+        }
+
+        public static void ResetColor()
+        {
+            Console.ForegroundColor = textColor;
+            Console.BackgroundColor = bgColor;
+        }
+        public static void changeFormat()
+        {
+            if(textColor == ConsoleColor.White)
+            {
+                textColor = ConsoleColor.Black;
+                bgColor = ConsoleColor.White;
+            }
+            else
+            {
+                textColor = ConsoleColor.White;
+                bgColor = ConsoleColor.Black;
+            }
+            ResetColor();
+            Console.Clear();
         }
     }
 }

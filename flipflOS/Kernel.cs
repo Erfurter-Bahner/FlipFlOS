@@ -15,7 +15,7 @@ namespace flipflOS
         public static Sys.FileSystem.CosmosVFS fs1;
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
-        public Directory currentdir;
+        public static Directory currentdir;
 
         public static ConsoleColor textColor = ConsoleColor.White;
         public static ConsoleColor bgColor = ConsoleColor.Black;

@@ -84,7 +84,9 @@ namespace flipflOS
                     case ConsoleKey.Tab: //saves file
                         saveChanges();
                         break;
-
+                    case ConsoleKey.Delete:
+                        mousemode();
+                        break;
                     case ConsoleKey.Escape: // Exit
                         if (saved || confirmedescape)
                         {
@@ -118,6 +120,10 @@ namespace flipflOS
         {
             Console.Clear(); // clears terminal prior to returning to standard Programm
             return editingFile; //soll am Ende fertige File zurückgeben
+        }
+        public void mousemode()
+        {
+            this.Inhalt = new Painter().paint(Inhalt);
         }
         public void notify(String msg)
         {

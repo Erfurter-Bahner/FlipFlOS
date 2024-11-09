@@ -204,9 +204,6 @@ namespace flipflOS
                     case "colorchange":
                             changeFormat();
                         break;
-                    case "mouse":
-                            new Painter().startPainter();
-                        break;
                     default:
                         Console.WriteLine("command not known. Please use 'help' for help.");
                         break;
@@ -277,7 +274,7 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
             }
-            currentdir.createFile(fileString);
+            if (Serializer.saveFile(currentdir, fileString, new string[]{"",""})) currentdir.addFile(new Directory.File(fileString,new string[0]));
             currentdir = startingdir;
         }
         public void removeFile(String[] args)

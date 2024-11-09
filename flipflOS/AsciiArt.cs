@@ -123,7 +123,7 @@ namespace flipflOS
         {
             "--------------------------------------------------------------------------------",
             "-| esc to leave | tab to save |  -FlipFlOS-  File Editor | Author: P. Stephan |-",
-            "--------------------------------------------------------------------------------",
+            "-|____   Del to start MouseMode    --|--    MouseMid to leave MouseMode   ____|-",
         };
         public static String[] readerSettings =
 {

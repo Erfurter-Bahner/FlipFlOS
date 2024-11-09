@@ -15,7 +15,7 @@ namespace flipflOS
         public static Sys.FileSystem.CosmosVFS fs1;
         DateTime start;
         Memory mem = new Memory(); //initialisieren aller Variablen ofc
-        public Directory currentdir;
+        public static Directory currentdir;
 
         public static ConsoleColor textColor = ConsoleColor.White;
         public static ConsoleColor bgColor = ConsoleColor.Black;
@@ -274,7 +274,7 @@ namespace flipflOS
             {
                 changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
             }
-            currentdir.createFile(fileString);
+            if (Serializer.saveFile(currentdir, fileString, new string[]{"",""})) currentdir.addFile(new Directory.File(fileString,new string[0]));
             currentdir = startingdir;
         }
         public void removeFile(String[] args)

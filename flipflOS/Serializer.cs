@@ -22,9 +22,14 @@ namespace flipflOS
                 String filePath = generateDirectoryPath(dir);
                 if (filePath == @"0:\") filePath += filename;
                 else filePath += @"\" + filename;
+                Console.WriteLine("filepath: " + filePath);
+                new Kernel().Sleep(1000);
 
-                createDirectoryFromFilepath(dir, filePath);
-
+                // createDirectoryFromFilepath(dir, filePath
+                if(content == null)
+                {
+                    content = new String[0];
+                }
                 File.WriteAllText(filePath, string.Join("\n",content));
                 Console.WriteLine("File written successfully!");
                 return true;
@@ -96,10 +101,14 @@ namespace flipflOS
                     System.IO.Directory.CreateDirectory(directoryPath);
                     Console.WriteLine("Directory created: " + directoryPath);
                 }
+                else
+                {
+                    Console.WriteLine("Directory already exists");
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: " + e.Message);
+                Console.WriteLine("Error creating Directory: " + e.Message);
             }
         }
         public static bool deleteDirectory(Directory dir,string directoryname)

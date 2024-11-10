@@ -156,37 +156,37 @@ namespace flipflOS
                         printCurrentDir();
                         break;
                     case "ls":
-                        printAllFilesAndDirs();
+                            FileManager.printAllFilesAndDirs();
                         break;
                     case "mkdir":
-                        makeDirectory(args);
+                            FileManager.makeDirectory(args);
                         break;
                     case "removeDir":
-                        removeDirectory(args);
+                            FileManager.removeDirectory(args);
                         break;
                     case "touch":
-                        makeFile(args);
+                            FileManager.makeFile(args);
                         break;
                     case "readFile":
-                        read(args);
+                            FileManager.read(args);
                         break;
                     case "read":
-                        read(args);
+                            FileManager.read(args);
                         break;
                     case "removeFile":
-                        removeFile(args);
+                            FileManager.removeFile(args);
                         break;
                     case "moveFile":
-                        moveFile(args);
+                            FileManager.moveFile(args);
                         break;
                     case "copyFile":
-                        copyFile(args);
+                            FileManager.copyFile(args);
                         break;
                     case "edit":
-                        editFile(args);
+                            FileManager.editFile(args);
                         break;
                     case "rename":
-                        rename(args);
+                            FileManager.rename(args);
                         break;
                     case "clear":
                         Console.Clear();
@@ -227,116 +227,7 @@ namespace flipflOS
                     Console.WriteLine("\t" + CommandManager.commands[i].info);
                 }
         }
-        public void makeDirectory(String[] args)
-        {
-            if (args.Length <= 1)
-                {
-                    Console.WriteLine("Not enough Arguments. Syntax: mkdir dir");
-                    return;
-                }
-            currentdir.createSubDirectory(args[1]);
-
-            Serializer.createDirectory(currentdir,args[1]);
-        }
-        public void removeDirectory(String[] args)
-        {
-            if (args.Length <= 1)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: mkdir dir");
-                return;
-            }
-            if (Serializer.deleteDirectory(currentdir, args[1]))
-            {
-                currentdir.removeSubDirectory(args[1]);
-            }
-
-        }
-        public void makeFile(String[] args)
-        {
-            if (args.Length <= 1)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: touch file");
-                return;
-            }
-
-            String path = args[1];        //nimmt die argumente
-            Directory startingdir = currentdir; //speichert ursprüngliches directory
-
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
-
-            if (seperatedbyslash.Length == 0 || fileString == "")
-            {
-                Console.WriteLine("No name given");
-                return;
-            }
-            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
-            }
-            if (Serializer.saveFile(currentdir, fileString, new string[]{"",""})) currentdir.addFile(new Directory.File(fileString,new string[0]));
-            currentdir = startingdir;
-        }
-        public void removeFile(String[] args)
-        {
-            if (args.Length <= 1) return;
-
-            String path = args[1];
-            Directory startingdir = currentdir; //speichert startverzeichnis um später zurückzukommen
-            String[] seperatedbyslash = path.Split("/"); //teilt pfad in unterOrdner
-            String file = seperatedbyslash[seperatedbyslash.Length - 1]; //speichert Dateiname
-            for(int i = 0;i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //geht zum Pfad wo die Datei ist
-            }
-            if(Serializer.deleteFile(currentdir, file)) currentdir.deleteFile(file); //löscht File
-            currentdir = startingdir; //geht wieder zum Startverzeichnis
-        }
-        public void moveFile(String[] args)
-        {
-            copyFile(args);
-
-            String path = args[1];        //nimmt die argumente
-
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-            String file = seperatedbyslash[seperatedbyslash.Length - 1];
-
-            currentdir.deleteFile(file); //löscht File
-        }
-        public void copyFile(String[] args)
-        {
-            if (args.Length < 3)
-            {
-                Console.WriteLine("Not enough arguments.");
-                return;
-            }
-            String path = args[1];        //nimmt die argumente
-            String destination = args[2];
-
-            Directory startingdir = currentdir;
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-            String file = seperatedbyslash[seperatedbyslash.Length - 1];
-
-            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
-            }
-            if (currentdir.getFile(file) == null)
-            {
-                return;
-            }
-            Directory.File movingFile = currentdir.getFile(file); //speichert Datei in einer temporären Variable
-            Directory firstFileDirectory = currentdir; //speichert directory von File ab, falls Zieldir bereits Datei mit namen beinhaltet.
-            currentdir = startingdir; //fängt von vorne an
-
-            seperatedbyslash = destination.Split("/"); //teilt zielPfad 
-            for (int i = 0; i < seperatedbyslash.Length; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zum Zielpfad
-            }
-            currentdir.addFile(new Directory.File(movingFile.name,movingFile.content)); //speichert Datei ab, wenn möglich.
-            currentdir = startingdir; //geht wieder zum Startverzeichnis
-        }
+       
         public void createRoot()
         { //erstellt alle nötigen verzeichnisse für das dateisystem
             currentdir = Serializer.createRoot();
@@ -362,7 +253,7 @@ namespace flipflOS
                 changeDir(directory); // abarbeitung der directories von links nach rechts
             }
         }
-        public void changeDir(String directory)
+        public static void changeDir(String directory)
         {
             if (directory == "..")
             {
@@ -390,111 +281,8 @@ namespace flipflOS
         {
             Console.WriteLine("  "+currentdir.name);
         }
-        public void editFile(String[] args)
-        {
-            if (args.Length <= 1) return;
-
-            String path = args[1];        //nimmt die argumente
-
-            Directory startingdir = currentdir; //speichert ursprüngliches directory
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-
-            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
-
-            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
-            }
-            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
-            {
-                return;
-            }
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            drawLogo(0, 0, AsciiArt.Fileeditor);
-            ResetColor();
-            Sleep(2000);
-            Directory.File file = currentdir.getFile(fileString);
-            Directory.File newfile = new FileEditor().startFileeditor(file);
-            if(Serializer.deleteFile(currentdir,file.name)) currentdir.deleteFile(file.name);
-            if(Serializer.saveFile(currentdir,file.name,newfile.content)) currentdir.addFile(newfile);
-            
-            currentdir = startingdir; // zurück zum ersten Directory
-        }
-        public void read(String[] args)
-        {
-            if (args.Length <= 1) return;
-            String path = args[1];        //nimmt die argumente
-
-            Directory startingdir = currentdir; //speichert ursprüngliches directory
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-
-            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
-            
-            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
-            }
-            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
-            {
-                return;
-            }
-
-            new FileEditor().readFile(currentdir.getFile(fileString));
-
-            currentdir = startingdir; // zurück zum ersten Directory
-        }
-        public void rename(String[] args)
-        {
-            if (args.Length < 3)
-            {
-                Console.WriteLine("Not enough Arguments. Syntax: rename [file] [newname]");
-                return;
-            }
-            String path = args[1];        //nimmt die argumente
-
-            Directory startingdir = currentdir; //speichert ursprüngliches directory
-            String[] seperatedbyslash = path.Split("/"); //teilt den ersten path mit den Slashs
-
-            String fileString = seperatedbyslash[seperatedbyslash.Length - 1];
-
-            for (int i = 0; i < seperatedbyslash.Length - 1; i++)
-            {
-                changeDir(seperatedbyslash[i]); //bewegt currentdir zur path von der Datei
-            }
-            if (currentdir.getFile(fileString) == null) //wenn FIle nicht existiert, returne
-            {
-                return;
-            }
-            Directory.File file = currentdir.getFile(fileString);
-            file.name = args[2];
-            currentdir = startingdir;
-        }
-        public void printAllFilesAndDirs()
-        {
-
-            if (currentdir.subdirectories != null)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-
-                foreach (var dir in currentdir.subdirectories) //iteriert durch alle subdirs und printet sie blau
-                {
-                    Console.WriteLine($"  {dir.name}");
-                }
-            }
-
-            if (currentdir.files != null)
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-
-                foreach (var file in currentdir.files) //iteriert durch alle dateiein im directory und printet sie blau
-                {
-                    Console.WriteLine($"  {file.name}");
-                }
-            }
-            ResetColor();
-            ClearCurrentLine();
-        }
-        public void loadingScreen(int seconds)
+        
+        public static void loadingScreen(int seconds)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -516,7 +304,7 @@ namespace flipflOS
             Console.Clear();
             ResetColor();
         }
-        public void drawLogo(int X, int Y, String[] logo)
+        public static void drawLogo(int X, int Y, String[] logo)
         {
             Console.Clear();
             for (int i = 0; i < AsciiArt.logo.Length; i++)
@@ -527,7 +315,7 @@ namespace flipflOS
             }
 
         }
-        public void Sleep(int milliseconds)
+        public static void Sleep(int milliseconds)
         {
             // Simple delay using a busy loop
             var ticks = DateTime.Now.Ticks + (milliseconds * 10000); // Convert milliseconds to ticks (1 ms = 10000 ticks)

@@ -23,7 +23,7 @@ namespace flipflOS
                 if (filePath == @"0:\") filePath += filename;
                 else filePath += @"\" + filename;
                 Console.WriteLine("filepath: " + filePath);
-                new Kernel().Sleep(1000);
+                Kernel.Sleep(1000);
 
                 // createDirectoryFromFilepath(dir, filePath
                 if(content == null)

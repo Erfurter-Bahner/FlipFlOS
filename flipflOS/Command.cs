@@ -16,6 +16,7 @@ namespace flipflOS
             new Command("gcd", "gcd", "prints current path of directory"),
             new Command("ls", "ls", "prints list of all elements in current directory"),
             new Command("mkdir", "mkdir [directory]", "creates subdirectory in current directory."),
+            new Command("removeDir","removeDir [directory]","removed Empty Directory"),
             new Command("touch", "touch [file or dir with File]", "creates File"),
             new Command("readFile", "readFile [file or dir with File]", "prints content of file"),
             new Command("removeFile","removeFile [file or dir with File]","removes File in current or other directory"),
@@ -26,7 +27,8 @@ namespace flipflOS
             new Command("commands", "commands", "list all available commands"),
             new Command("commands+","commands+","list all available commands with usage"),
             new Command("clear","clear","clears whole Terminal"),
-            new Command("loadingScreen","loadingScreen [seconds]","shows the Loading Screen for given seconds")
+            new Command("loadingScreen","loadingScreen [seconds]","shows the Loading Screen for given seconds"),
+            new Command("colorchange","colorchange","changes colormode, whitemode is ugly tho")
         };
         public static Command getCommand(String name)
         {

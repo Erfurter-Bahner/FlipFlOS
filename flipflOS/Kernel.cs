@@ -118,8 +118,12 @@ namespace flipflOS
                             }
                             break;
                         default:
-                            currentInput += key.KeyChar;
-                            Console.Write(key.KeyChar);
+
+                            if (key.KeyChar > 31)
+                            {
+                                currentInput += key.KeyChar;
+                                Console.Write(key.KeyChar);
+                            }
                             break;
                     }
                     if (key.Key == ConsoleKey.Enter) // End the loop after an "Enter" press
